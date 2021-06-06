@@ -1,0 +1,64 @@
+* {
+    background-color: whitesmoke;
+}
+
+header {
+    text-align: justify;
+    letter-spacing: 1px;
+    height: 8em;
+    padding: 2em 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+a {
+    text-decoration: none;
+}
+
+.site-header {
+    padding: 40px 50px 26px;
+}
+
+.site-header {
+    padding: 40px 20px 0;
+    position: relative;
+}
+
+.site-logo {
+    font-family: Karla, sans-serif;
+    font-size: 25px;
+    line-height: 1.5em;
+    position: relative;
+    text-align: left;
+    margin-top: -10px;
+    width: 20%;
+    margin-left: 1%;
+}
+
+.empty-div {
+    width: 40%;
+}
+
+.site-navigation {
+    font-family: Karla, sans-serif;
+    font-size: 15px;
+    line-height: 1.5em;
+    position: relative;
+    text-align: right;
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.site-header a {
+    color: black;
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    height: 75px;
+}
+footer {
+    background-color: rgb(37, 37, 37);
+}
