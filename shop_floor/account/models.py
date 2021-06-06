@@ -38,8 +38,8 @@ class MyAccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
     class Meta:
-        verbose_name = 'Аккаунт'
-        verbose_name_plural = 'Аккаунты'
+        verbose_name = 'Человек'
+        verbose_name_plural = 'Люди'
 
     email = models.EmailField(verbose_name='Email', unique=True, max_length=120)
     username = models.CharField(verbose_name='username', max_length=60, unique=True)

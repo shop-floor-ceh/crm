@@ -23,22 +23,18 @@
         <!-- делает пространство между лого и меню-->
     </div>
     <nav class="site-navigation">
-        {% if request.user.is_authenticated %}
         {% if request.user.is_staff %}
-        <a href="admin">Админка</a>
+            <a href="admin">Админка</a>
         {% endif %}
-        <a href="employees">Сотрудники</a>
         <a href="calendar">Мой календарь</a>
         <a href="open_works">Открытые проекты</a>
+        <a href="employees">Сотрудники</a>
         <a href="profile">Профиль</a>
-        {% else %}
-        <a href="login">Вход</a>
-        {% endif %}
-
+        <a href="settings">Настройки</a>
     </nav>
 </header>
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 <footer>
 </footer>
 </body>
