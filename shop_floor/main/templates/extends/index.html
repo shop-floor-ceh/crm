@@ -30,13 +30,13 @@
         <a href="employees">Сотрудники</a>
         <a href="calendar">Мой календарь</a>
         <a href="open_works">Открытые проекты</a>
-        <a href="profile">Профиль</a>
+        <a href="{% url 'profile_page' %}">Профиль</a>
         {% else %}
         <div class="dropdown">
             <button class="dropbtn">Вы еще не вошли</button>
             <div class="dropdown-content">
-                <a href="login">Вход</a>
-                <a href="registration">Регистрация</a>
+                <a href="{% url 'login_page' %}">Вход</a>
+                <a href="{% url 'registration_page' %}">Регистрация</a>
             </div>
         </div>
         {% endif %}
@@ -48,6 +48,3 @@
 </footer>
 </body>
 </html>
-
-
-

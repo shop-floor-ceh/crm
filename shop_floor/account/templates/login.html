@@ -3,4 +3,9 @@
 <div>
     <a> Здесь будет авторизация</a>
 </div>
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="create_user">
+</form>
 {% endblock %}
