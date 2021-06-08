@@ -7,10 +7,24 @@ from .models import Account
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = Account
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        fields = [
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'about_me',
+            'phone',
+            'photo',
+            'password1',
+            'password2',
+        ]
 
 
 class LoginUserForm(AuthenticationForm):
     class Meta:
         model = Account
-        fields = ['email', 'password1']
+        fields = [
+            'email',
+            'password1',
+        ]
+

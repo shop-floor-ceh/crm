@@ -42,6 +42,9 @@
         {% endif %}
     </nav>
 </header>
+{% for i in messages %}
+{{i}}
+{% endfor %}
 {% block content %}
 {% endblock %}
 <footer>
