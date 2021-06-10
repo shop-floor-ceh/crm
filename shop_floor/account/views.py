@@ -5,8 +5,10 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='login')
 def profile_page(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
     context = {}
     return render(request, 'profile.html', context)
 
