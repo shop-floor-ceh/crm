@@ -15,18 +15,6 @@ class Participant(models.Model):
         return self.name
 
 
-class Group(models.Model):
-    class Meta:
-        verbose_name = 'Команда'
-        verbose_name_plural = 'Команды'
-
-    participants = models.ManyToManyField(
-        verbose_name='Участники группы',
-        to=Participant,
-        blank=True
-    )
-
-
 class Project(models.Model):
     class Meta:
         verbose_name = 'Проект'
@@ -56,7 +44,11 @@ class Project(models.Model):
     open_to_join = models.BooleanField(verbose_name='Открыт для входа', default=True)
     ended = models.BooleanField(verbose_name='Завершен', default=False)
     admin = models.ForeignKey(verbose_name='Админ', to=Account, on_delete=models.CASCADE)
-    group = models.OneToOneField(verbose_name='Команда', to=Group, on_delete=models.CASCADE)
+    participants = models.ManyToManyField(
+        verbose_name='Команда',
+        to=Participant,
+        blank=True
+    )
 
     def __str__(self):
         return self.name

@@ -4,4 +4,11 @@
 <div>
     <a> Main</a>
 </div>
+{% for project in projects %}
+<p>{{ project }}</p>
+<p>Участники:</p>
+{% for part in project.participants.all %}
+<p>{{part}}</p>
+{% endfor %}
+{% endfor %}
 {% endblock %}
