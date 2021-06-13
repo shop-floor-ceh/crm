@@ -2,17 +2,16 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 <div>
-    <a> Здесь будет профиль</a>
+    <p><a> Здесь будет профиль</a></p>
     <p></p>
     {% if user.photo %}
-    {{ user.photo }}
     <p>
         <img src="{{ user.photo }}" width="500px">
     </p>
     {% endif %}
-    {{ user }}
+    <p>{{ user }}</p>
     <p>
-        <a href="{% url 'logout_page' %}">Выход</a>
+        <a class="btn btn-outline-secondary" href="{% url 'logout_page' %}">Выход</a>
     </p>
 </div>
 {% endblock %}

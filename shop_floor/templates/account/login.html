@@ -2,14 +2,20 @@
 {% block title %} Login {% endblock %}
 {% block content %}
 <div>
-    <a> Здесь будет авторизация</a>
+    <h2> Вход </h2>
 </div>
 <form method="POST" action="">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" name="create_user">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.username.name }}" placeholder="Email"
+               autocomplete="username" required>
+    </div>
+    <div class="form-group mb-3">
+        <input type="password" class="form-control" name="{{ form.password.name }}" placeholder="Пароль"
+               autocomplete="password" required>
+    </div>
+    <input class="btn btn-outline-primary" type="submit" name="create_user">
+    <a class="btn btn-outline-secondary" href="{% url 'registration_page' %}">Регистрация</a>
+
 </form>
-<p>
-    <a href="{% url 'registration_page' %}">Регистрация</a>
-</p>
 {% endblock %}

@@ -2,11 +2,48 @@
 {% block title %} Registration {% endblock %}
 {% block content %}
 <div>
-    <a> Здесь будет регистрация</a>
+    <h2>Регистрация</h2>
 </div>
 <form method="POST" action="">
+
     {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" name="create_user">
+
+    <div class="input-group mb-3">
+        <input type="email" class="form-control" name="{{ form.email.name }}" placeholder="Email"
+               autocomplete="email" required>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.username.name }}" placeholder="Username"
+               autocomplete="username" required>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.first_name.name }}" placeholder="Имя"
+               autocomplete="first_name" required>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.last_name.name }}" placeholder="Фамилия"
+               autocomplete="last_name" required>
+    </div>
+    <div class="input-group">
+        <textarea name="about_me" class="form-control" placeholder="О себе"></textarea>
+    </div>
+    <p></p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.phone.name }}" placeholder="Телефон"
+               autocomplete="phone" required>
+    </div>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" id="photo" placeholder="Аватарка">
+        <label class="input-group-text" for="photo">Аватарка</label>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" name="{{ form.password1.name }}" placeholder="Пароль"
+               autocomplete="new-password" required>
+    </div>
+    <div class="input-group mb-3">
+        <input type="password" class="form-control" name="{{ form.password2.name }}" placeholder="Повторите пароль"
+               autocomplete="new-password" required>
+    </div>
+    <input class="btn btn-outline-primary" type="submit" name="create_user">
 </form>
 {% endblock %}

@@ -12,7 +12,7 @@ def profile_page(request):
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
     user = Account.objects.get(username=request.user.username)
-    user.photo.name = '/'.join(user.photo.name.split('/')[2:])
+    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     context = {'user': user}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
 
