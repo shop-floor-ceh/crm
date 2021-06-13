@@ -2,6 +2,16 @@
 {% block content %}
 <div>
     <a> Здесь будет профиль</a>
-    <a href="{% url 'logout_page' %}">Выход</a>
+    <p></p>
+    {% if user.photo %}
+    {{ user.photo }}
+    <p>
+        <img src="{{ user.photo }}" width="500px">
+    </p>
+    {% endif %}
+    {{ user }}
+    <p>
+        <a href="{% url 'logout_page' %}">Выход</a>
+    </p>
 </div>
 {% endblock %}

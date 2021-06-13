@@ -2,15 +2,21 @@ from django.shortcuts import render, redirect
 from .forms import CreateUserForm, LoginUserForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from account.models import Account
 
 
 def profile_page(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
-    context = {}
+    user = Account.objects.get(username=request.user.username)
+    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
+    context = {'user': user}
     return render(request, 'profile.html', context)
+
+
+# def profile_plug(request):
+#     return redirect('/')
 
 
 def authorization(request):
