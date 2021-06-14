@@ -14,6 +14,7 @@ port: 5432
 Открываете проект в PyCharm 
 
 В терминале прописываете команды
+
 ```pip install -r requirements.txt```
 
 ```cd shop_floor```
