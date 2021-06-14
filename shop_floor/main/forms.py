@@ -14,6 +14,7 @@ class CreateProjectForm(ModelForm):
             'kpp',
             'open_to_join',
             'ended',
+            'about_project',
             'admin',
         ]
 

@@ -1,7 +1,20 @@
 {% extends 'extends/index.html' %}
 {% block title %} Open project {% endblock %}
 {% block content %}
-{% for item in projects %}
-<p>{{ item }}</p>
-{% endfor %}
+<h1>
+    Открытые проекты
+</h1>
+<div class="d-flex flex-wrap">
+    {% for project in projects %}
+    <div class="p-2">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ project }}</h5>
+                <p class="card-text">{{ project.about_project }}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

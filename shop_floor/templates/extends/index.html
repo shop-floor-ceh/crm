@@ -32,10 +32,10 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-<nav id="navbar" class="navbar navbar-light bg-light px-3">
+<nav id="navbar" class="navbar navbar-light bg-light px-3 sticky-top">
     <a class="navbar-brand" href="/">
-        <img src="{% static 'logo.png' %}" alt="" width="30" height="30" class="d-inline-block align-text-top">
-        ЦЕХ
+<!--        <img src="{% static 'logo.png' %}" alt="" width="50" height="50" class="d-inline-block align-text-top">-->
+        <h3>ЦЕХ</h3>
     </a>
     <ul class="nav nav-pills">
         {% if request.user.is_authenticated %}

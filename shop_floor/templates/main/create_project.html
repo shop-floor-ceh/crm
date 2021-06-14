@@ -9,24 +9,29 @@
     <div class="input-group mb-3">
         <input type="text" class="form-control" name="{{ form.name.name }}" placeholder="Название">
     </div>
+    <div class="input-group">
+        <label class="input-group-text" for="admin">О проекте</label>
+        <textarea name="about_me" class="form-control" placeholder="Краткое описание"></textarea>
+    </div>
+    <p></p>
     <div class="input-group mb-3">
-        <input type="file" class="form-control" id="synopsis" placeholder="Синопсис" name="{{ form.synopsis.name }}">
         <label class="input-group-text" for="synopsis">Синопсис</label>
+        <input type="file" class="form-control" id="synopsis" placeholder="Синопсис" name="{{ form.synopsis.name }}">
     </div>
     <div class="input-group mb-3">
+        <label class="input-group-text" for="literary_script">Лит сценарий</label>
         <input type="file" class="form-control" id="literary_script" placeholder="Литературный сценарий"
                name="{{ form.literary_script.name }}">
-        <label class="input-group-text" for="literary_script">Лит сценарий</label>
     </div>
     <div class="input-group mb-3">
+        <label class="input-group-text" for="directors_script">Реж сценарий</label>
         <input type="file" class="form-control" id="directors_script" placeholder="Режиссерский сценарий"
                name="{{ form.directors_script.name }}">
-        <label class="input-group-text" for="directors_script">Реж сценарий</label>
     </div>
     <div class="input-group mb-3">
+        <label class="input-group-text" for="kpp">КПП</label>
         <input type="file" class="form-control" id="kpp" placeholder="Календарно-постановочный план"
                name="{{ form.kpp.name }}">
-        <label class="input-group-text" for="kpp">КПП</label>
     </div>
     <div class="input-group mb-3">
         <label class="input-group-text" for="admin">Админ</label>
@@ -48,7 +53,7 @@
             Завершен
         </label>
     </div>
-    <!--     {{ form.as_p }}-->
+    <p></p>
     <input class="btn btn-outline-primary" type="submit" name="create_project">
 
 </form>

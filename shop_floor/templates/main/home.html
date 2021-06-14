@@ -2,14 +2,22 @@
 {% block title %} Main page {% endblock %}
 {% block content %}
 <div>
-    <a> Main</a>
+    <h2> Main</h2>
 </div>
-{% for project in projects %}
-<p>{{ project }}</p>
-<p>Участники:</p>
-{% for part in project.participants.all %}
-<p>{{part}}</p>
-{% endfor %}
-{% endfor %}
+<div class="d-flex flex-wrap">
+    {% for project in projects %}
+    <div class="p-2">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ project }}</h5>
+                <p class="card-text">{{ project.about_project }}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<p></p>
 <a class="btn btn-outline-secondary" href="{% url 'create_project' %}">Создай свой проект</a>
 {% endblock %}

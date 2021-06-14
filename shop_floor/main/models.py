@@ -50,6 +50,7 @@ class Project(models.Model):
     open_to_join = models.BooleanField(verbose_name='Открыт для входа', default=True)
     ended = models.BooleanField(verbose_name='Завершен', default=False)
     admin = models.ForeignKey(verbose_name='Админ', to=Account, on_delete=models.CASCADE)
+    about_project = models.TextField(verbose_name='О проекте', default='')
     participants = models.ManyToManyField(
         verbose_name='Команда',
         to=Participant,

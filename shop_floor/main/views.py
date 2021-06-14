@@ -7,21 +7,33 @@ from main.models import Project, Participant
 from main.forms import CreateProjectForm
 from account.models import Account
 from shop_floor.settings import BASE_DIR
+from django.db.models.query import QuerySet
 
 
 def main_page(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
     user = Account.objects.get(username=request.user.username)
     participants = Participant.objects.filter(participant=user)
     projects = set()
     for i in participants:
-        x = Project.objects.get(participants=i)
+        x = Project.objects.filter(participants=i)
+
         if x:
-            projects.add(x)
+            if type(x) is QuerySet:
+                for j in list(x):
+                    projects.add(j)
+            else:
+                projects.add(x)
     context = {'projects': projects}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'home.html'), context)
 
 
 def open_project(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
     project = Project.objects.filter(open_to_join=True)
     context = {'projects': project}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'open_projects.html'), context)
