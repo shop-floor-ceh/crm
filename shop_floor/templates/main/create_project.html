@@ -1,0 +1,55 @@
+{% extends 'extends/index.html' %}
+{% block title %} Создание проекта {% endblock %}
+{% block content %}
+<div>
+    <h2> Новый проект </h2>
+</div>
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="{{ form.name.name }}" placeholder="Название">
+    </div>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" id="synopsis" placeholder="Синопсис" name="{{ form.synopsis.name }}">
+        <label class="input-group-text" for="synopsis">Синопсис</label>
+    </div>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" id="literary_script" placeholder="Литературный сценарий"
+               name="{{ form.literary_script.name }}">
+        <label class="input-group-text" for="literary_script">Лит сценарий</label>
+    </div>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" id="directors_script" placeholder="Режиссерский сценарий"
+               name="{{ form.directors_script.name }}">
+        <label class="input-group-text" for="directors_script">Реж сценарий</label>
+    </div>
+    <div class="input-group mb-3">
+        <input type="file" class="form-control" id="kpp" placeholder="Календарно-постановочный план"
+               name="{{ form.kpp.name }}">
+        <label class="input-group-text" for="kpp">КПП</label>
+    </div>
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="admin">Админ</label>
+        <select name='admin' class="form-select" aria-label="Default select example" id="admin" required>
+            <option value="{{ request.user.id }}" selected>{{ request.user }}</option>
+        </select>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="open_to_join" name="{{ form.open_to_join.name }}"
+               checked>
+        <label class="form-check-label" for="open_to_join">
+            Открыт для входа
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="ended" name="{{ form.ended.name }}">
+        <label class="form-check-label" for="ended">
+            Завершен
+        </label>
+    </div>
+    <!--     {{ form.as_p }}-->
+    <input class="btn btn-outline-primary" type="submit" name="create_project">
+
+</form>
+{% endblock %}

@@ -10,6 +10,12 @@ class Participant(models.Model):
 
     participant = models.ForeignKey(verbose_name='Участник', to=Account, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя роли', max_length=120)
+    can_add_participant = models.BooleanField(verbose_name='Может добавлять новых участников', default=False)
+    can_change_synopsis = models.BooleanField(verbose_name='Может менять синопсис', default=False)
+    can_change_literary_script = models.BooleanField(verbose_name='Может менять лит сценарий', default=False)
+    can_change_directors_scripts = models.BooleanField(verbose_name='Может менять режиссерский сценарий', default=False)
+    can_change_kpp = models.BooleanField(verbose_name='Может менять кпп', default=False)
+    can_add_dates = models.BooleanField(verbose_name='Может добавлять даты встреч', default=False)
 
     def __str__(self):
         return self.name
