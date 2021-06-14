@@ -12,6 +12,7 @@ port: 5432
 В блоке DATABASE пишите свой паароль от PgAdmin4
 ### 4 
 Открываете проект в PyCharm 
+
 В терминале прописываете команды
 ```pip install -r requirements.txt```
 
