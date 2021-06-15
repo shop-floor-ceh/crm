@@ -2,3 +2,4 @@ Django
 selenium
 pillow
 psycopg2
+six
