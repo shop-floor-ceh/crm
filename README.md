@@ -10,6 +10,9 @@
 host: localhost
 
 port: 5432
+
+В сервере создайте базу данных под именем ceh
+
 ### 3 
 В файле shop_floor/shop_floor/settings.py
 
