@@ -30,6 +30,16 @@ def main_page(request):
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'home.html'), context)
 
 
+def unique_project_page(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    if project:
+        context = {'project': project}
+        return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
+    else:
+        messages.success(request, 'Такого проекта нет')
+        return redirect('/')
+
+
 def open_project(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')

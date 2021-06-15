@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import Account
+from .models import Account, Notification
 
 
 class CreateUserForm(UserCreationForm):
@@ -28,3 +28,11 @@ class LoginUserForm(AuthenticationForm):
             'password1',
         ]
 
+
+class NotificationSettingForm(ModelForm):
+    class Meta:
+        model = Notification
+        fields = [
+            'mail',
+            'telegram',
+        ]

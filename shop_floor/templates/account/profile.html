@@ -2,16 +2,19 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 <div>
-    <p><a> Здесь будет профиль</a></p>
-    <p></p>
-    {% if user.photo %}
-    <p>
-        <img src="{{ user.photo }}" width="500px">
-    </p>
-    {% endif %}
-    <p>{{ user }}</p>
-    <p>
-        <a class="btn btn-outline-secondary" href="{% url 'logout_page' %}">Выход</a>
-    </p>
+    <h2>Профиль</h2>
 </div>
+<p>
+<h4>{{ user }}</h4>
+<p>
+{% if user.photo %}
+<p>
+    <img src="/{{ user.photo }}" width="500px">
+</p>
+{% endif %}
+{% if request.user == user %}
+<p>
+    <a class="btn btn-outline-secondary" href="{% url 'settings' %}">Настройки</a>
+</p>
+{% endif %}
 {% endblock %}

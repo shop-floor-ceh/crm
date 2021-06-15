@@ -45,7 +45,7 @@
         </li>
         {% endif %}
         <li class="nav-item m-2">
-            <a class="btn btn-outline-secondary" href="employees">Сотрудники</a>
+            <a class="btn btn-outline-secondary" href="employees">Люди</a>
         </li>
         <li class="nav-item m-2">
             <a class="btn btn-outline-secondary" href="calendar">Календарь</a>
@@ -54,7 +54,7 @@
             <a class="btn btn-outline-secondary" href="{% url 'open_project' %}">Открытые проекты</a>
         </li>
         <li class="nav-item m-2">
-            <a class="btn btn-outline-secondary" href="{% url 'profile_page' %}">Профиль</a>
+            <a class="btn btn-outline-secondary" href="profile/{{ request.user.username }}">Профиль</a>
         </li>
         {% else %}
         <li class="nav-item dropdown m-2">

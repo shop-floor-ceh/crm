@@ -57,7 +57,7 @@ class Account(AbstractBaseUser):
     phone = models.CharField(verbose_name='phone', max_length=15, blank=True, default=0)
     photo = models.ImageField(verbose_name='photo', blank=True, default='', upload_to='account/static/profile')
     about_me = models.TextField(verbose_name='about me', blank=True, default='')
-
+    telegram_id = models.BigIntegerField(verbose_name='telegram id', blank=True, default=0)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name', ]
 
