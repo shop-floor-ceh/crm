@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 
 from shop_floor.settings import BASE_DIR
-from account.forms import CreateUserForm, LoginUserForm
+from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm
 from account.models import Account, Notification
 from account.utils import token_generator
 
@@ -84,10 +84,20 @@ def settings_page(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
+    if request.method == 'POST':
+        user = Account.objects.get(username=request.user.username)
+        notify = Notification.objects.get(user=user)
+
+        notify.telegram = True if 'telegram' in request.POST else False
+        notify.mail = True if 'mail' in request.POST else False
+        notify.save()
+        messages.success(request, 'Успешно сохранено')
+        return redirect('/settings')
     user = Account.objects.get(username=request.user.username)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
-    context = {'notification': notification, 'user': user}
+    notify_form = NotificationSettingForm()
+    context = {'notification': notification, 'user': user, 'notify_form':notify_form}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
 
 
