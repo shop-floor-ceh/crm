@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models.query import QuerySet
 
 import os
 
@@ -7,7 +8,6 @@ from main.models import Project, Participant
 from main.forms import CreateProjectForm
 from account.models import Account
 from shop_floor.settings import BASE_DIR
-from django.db.models.query import QuerySet
 
 
 def main_page(request):
@@ -49,6 +49,22 @@ def open_project(request):
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'open_projects.html'), context)
 
 
+def all_profiles(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
+    context = {}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'all_profiles.html'), context)
+
+
+def calendar(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
+    context = {}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'calendar.html'), context)
+
+
 def create_project(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
@@ -58,9 +74,7 @@ def create_project(request):
     context = {'form': form, 'users': users}
     if request.method == 'POST':
         form = CreateProjectForm(request.POST, request.FILES)
-
         if form.is_valid():
-
             print(request.FILES)
             print(request.POST)
             instance = form.save()

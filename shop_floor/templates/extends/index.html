@@ -41,10 +41,10 @@
                 </li>
                 {% endif %}
                 <li class="nav-item m-2">
-                    <a class="btn btn-light" href="employees">Люди</a>
+                    <a class="btn btn-light" href="{% url 'all_profiles' %}">Люди</a>
                 </li>
                 <li class="nav-item m-2">
-                    <a class="btn btn-light" href="calendar">Календарь</a>
+                    <a class="btn btn-light" href="{% url 'calendar' %}">Календарь</a>
                 </li>
                 <li class="nav-item m-2">
                     <a class="btn btn-light" href="{% url 'open_project' %}">Открытые проекты</a>

@@ -62,7 +62,6 @@ def registration(request):
             return redirect('/login')
         else:
             if 'password2' in user_form.errors:
-
                 invalid = user_form.errors['password2'][0]
                 messages.error(request, invalid)
                 context = {'form': user_form}
