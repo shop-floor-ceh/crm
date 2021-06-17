@@ -57,9 +57,27 @@ def create_project(request):
     users = Account.objects.all()
     context = {'form': form, 'users': users}
     if request.method == 'POST':
-        form = CreateProjectForm(request.POST)
+        form = CreateProjectForm(request.POST, request.FILES)
+
         if form.is_valid():
 
-            form.save()
-            return redirect('/profile')
+            print(request.FILES)
+            print(request.POST)
+            instance = form.save()
+            participant = Participant(
+                participant=request.user,
+                name='Aдмин',
+                can_add_participant=True,
+                can_change_synopsis=True,
+                can_change_literary_script=True,
+                can_change_directors_scripts=True,
+                can_change_kpp=True,
+                can_add_dates=True
+            )
+            participant.save()
+            instance.participants.add(participant)
+            print(instance)
+            return redirect(f'/project/{instance.id}')
+        else:
+            messages.error(request, 'Что-то пошло не так попробуй еще раз')
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'create_project.html'), context)
