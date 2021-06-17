@@ -27,35 +27,34 @@
         <a class="navbar-brand" href="/">
             <h3>ЦЕХ</h3>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04"
-                aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
                 {% if request.user.is_authenticated %}
                 {% if request.user.is_staff %}
                 <li class="nav-item m-2">
-                    <a class="btn btn-outline-secondary" href="admin">Админка</a>
+                    <a class="btn btn-light" href="admin">Админка</a>
                 </li>
                 {% endif %}
                 <li class="nav-item m-2">
-                    <a class="btn btn-outline-secondary" href="employees">Люди</a>
+                    <a class="btn btn-light" href="employees">Люди</a>
                 </li>
                 <li class="nav-item m-2">
-                    <a class="btn btn-outline-secondary" href="calendar">Календарь</a>
+                    <a class="btn btn-light" href="calendar">Календарь</a>
                 </li>
                 <li class="nav-item m-2">
-                    <a class="btn btn-outline-secondary" href="{% url 'open_project' %}">Открытые проекты</a>
+                    <a class="btn btn-light" href="{% url 'open_project' %}">Открытые проекты</a>
                 </li>
                 <li class="nav-item m-2">
-                    <a class="btn btn-outline-secondary" href="profile/{{ request.user.username }}">Профиль</a>
+                    <a class="btn btn-lighty" href="profile/{{ request.user.username }}">Профиль</a>
                 </li>
                 {% else %}
                 <li class="nav-item dropdown m-2">
-                    <a class="btn btn-outline-secondary" data-bs-toggle="dropdown" href="#" role="button"
+                    <a class="btn btn-light border" data-bs-toggle="dropdown" href="#" role="button"
                        aria-expanded="false">Вы еще не вошли</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'login_page' %}">Вход</a></li>

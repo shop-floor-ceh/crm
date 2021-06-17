@@ -26,7 +26,7 @@ def authorization(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('/profile')
+            return redirect(f'/profile/{user.username}')
         else:
             messages.error(request, 'Такого пользователя не найдено')
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'login.html'), context)
