@@ -18,7 +18,7 @@ class Participant(models.Model):
     can_add_dates = models.BooleanField(verbose_name='Может добавлять даты встреч', default=False)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} {self.participant}'
 
 
 class Project(models.Model):

@@ -45,6 +45,8 @@ def registration(request):
         if user_form.is_valid():
             user_form.is_active = False
             user = user_form.save()
+            user.is_active = False
+            user.save()
             Notification.objects.create(user=user, telegram=False, mail=False, vk=False)
 
             user_id = urlsafe_base64_encode(force_bytes(user.username))
