@@ -9,27 +9,27 @@
     {% csrf_token %}
 
     <div class="input-group mb-3">
-        <input type="email" class="form-control" name="{{ form.email.name }}" placeholder="Email"
+        <input value="{{ form.cleaned_data.email }}" type="email" class="form-control" name="{{ form.email.name }}" placeholder="Email"
                autocomplete="email" required>
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="{{ form.username.name }}" placeholder="Username"
+        <input value="{{ form.cleaned_data.username }}" type="text" class="form-control" name="{{ form.username.name }}" placeholder="Username"
                autocomplete="username" required>
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="{{ form.first_name.name }}" placeholder="Имя"
+        <input value="{{ form.cleaned_data.first_name }}" type="text" class="form-control" name="{{ form.first_name.name }}" placeholder="Имя"
                autocomplete="first_name" required>
     </div>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="{{ form.last_name.name }}" placeholder="Фамилия"
+        <input value="{{ form.cleaned_data.last_name }}" type="text" class="form-control" name="{{ form.last_name.name }}" placeholder="Фамилия"
                autocomplete="last_name" required>
     </div>
     <div class="input-group">
-        <textarea name="about_me" class="form-control" placeholder="О себе"></textarea>
+        <textarea name="about_me" class="form-control" placeholder="О себе">{{ form.cleaned_data.about_me }}</textarea>
     </div>
     <p></p>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="{{ form.phone.name }}" placeholder="Телефон"
+        <input value="{{ form.cleaned_data.phone }}" type="text" class="form-control" name="{{ form.phone.name }}" placeholder="Телефон"
                autocomplete="phone">
     </div>
     <div class="input-group mb-3">
@@ -39,6 +39,9 @@
     <div class="input-group mb-3">
         <input type="password" class="form-control" name="{{ form.password1.name }}" placeholder="Пароль"
                autocomplete="new-password" required>
+        <div class="invalid-feedback">
+            {{ invalid }}
+        </div>
     </div>
     <div class="input-group mb-3">
         <input type="password" class="form-control" name="{{ form.password2.name }}" placeholder="Повторите пароль"

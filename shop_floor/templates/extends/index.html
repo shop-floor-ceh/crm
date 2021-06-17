@@ -72,13 +72,22 @@
     <div class="row">
         {% for i in messages %}
         <p></p>
+        {% if i.tags == 'error' %}
         <div class="col">
-            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{i}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
         </div>
+        {% else %}
+        <div class="col">
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                {{i}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endif %}
         {% endfor %}
     </div>
     <p></p>

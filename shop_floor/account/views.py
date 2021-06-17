@@ -60,6 +60,19 @@ def registration(request):
 
             messages.success(request, 'Подтвердите свою почту и войдите')
             return redirect('/login')
+        else:
+            if 'password2' in user_form.errors:
+
+                invalid = user_form.errors['password2'][0]
+                messages.error(request, invalid)
+                context = {'form': user_form}
+                return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'registration.html'),
+                              context)
+            else:
+                messages.error(request, 'Что-то пошло не так, повторите попытку')
+                context = {'form': user_form}
+                return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'registration.html'),
+                              context)
     user_form = CreateUserForm()
     context = {'form': user_form}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'registration.html'), context)
@@ -97,7 +110,7 @@ def settings_page(request):
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
     notify_form = NotificationSettingForm()
-    context = {'notification': notification, 'user': user, 'notify_form':notify_form}
+    context = {'notification': notification, 'user': user, 'notify_form': notify_form}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
 
 
