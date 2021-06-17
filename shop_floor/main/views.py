@@ -57,11 +57,9 @@ def create_project(request):
     users = Account.objects.all()
     context = {'form': form, 'users': users}
     if request.method == 'POST':
-        form = CreateProjectForm(request.POST, request.FILES)
+        form = CreateProjectForm(request.POST)
         if form.is_valid():
-            print(request.FILES)
-            print(request.POST)
-            instance = form.save()
-            print(instance.synopsis)
+
+            form.save()
             return redirect('/profile')
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'create_project.html'), context)
