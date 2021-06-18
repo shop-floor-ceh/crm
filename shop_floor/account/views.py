@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 
 from shop_floor.settings import BASE_DIR
-from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm
+from account.forms import CreateUserForm, LoginUserForm
 from account.models import Account, Notification, SocialNetworks
 from account.utils import token_generator
 
@@ -16,17 +16,6 @@ import os
 
 
 def profile_page(request, username):
-    if not request.user.is_authenticated:
-        messages.error(request, 'Вы еще не вошли')
-        return redirect('/login')
-    user = Account.objects.get(username=username)
-    networks = SocialNetworks.objects.filter(user=user)
-    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
-    context = {'user': user, 'networks': networks}
-    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
-
-
-def settings_page(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
@@ -45,14 +34,21 @@ def settings_page(request):
                 user.phone = request.POST['phone']
             if 'photo' in request.FILES:
                 user.photo = request.FILES['photo']
-            user.save()
-            messages.success(request, 'Успешно изменено')
-            return redirect(f'/profile/{user.username}')
-        elif 'networks' in request.POST:
-            network = SocialNetworks(user=request.user, network_name=request.POST['network_name'], link=request.POST['link'])
+            try:
+                user.save()
+                messages.success(request, 'Успешно изменено')
+                return redirect(f'/profile/{user.username}')
+            except:
+                messages.error(request, 'Что-то пошло не так')
+                return redirect(f'/profile/{request.user.username}')
+
+        elif 'add-network' in request.POST:
+            user = Account.objects.get(username=request.user.username)
+            network = SocialNetworks(user=request.user, network_name=request.POST['network_name'],
+                                     link=request.POST['link'])
             network.save()
             messages.success(request, 'Успешно добавлено')
-            return redirect('/settings')
+            return redirect(f'/profile/{user.username}')
         elif 'notify' in request.POST:
             user = Account.objects.get(username=request.user.username)
             notify = Notification.objects.get(user=user)
@@ -60,21 +56,17 @@ def settings_page(request):
             notify.mail = True if 'mail' in request.POST else False
             notify.save()
             messages.success(request, 'Успешно сохранено')
-            return redirect('/settings')
-    user = Account.objects.get(username=request.user.username)
+            return redirect(f'/profile/{user.username}')
+    user = Account.objects.get(username=username)
+    networks = SocialNetworks.objects.filter(user=user)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
-    notify_form = NotificationSettingForm()
-    networks = SocialNetworks.objects.filter(user=user)
-    test_user_form = CreateUserForm()
     context = {
-        'notification': notification,
         'user': user,
-        'notify_form': notify_form,
         'networks': networks,
-        'test_user_form': test_user_form
+        'notification': notification,
     }
-    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
 
 
 def authorization(request):

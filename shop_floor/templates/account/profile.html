@@ -11,12 +11,6 @@
             <img src="/{{ user.photo }}" width="500px">
         </p>
         {% endif %}
-        {% if request.user == user %}
-        <p>
-            <a class="btn btn-outline-secondary" href="{% url 'settings' %}">Настройки профиля</a>
-        </p>
-        {% endif %}
-
     </div>
     <div class="p-2">
         <h4>{{ user }}</h4>
@@ -26,17 +20,164 @@
         {{ user.email }}
         <p></p>
         {{ user.phone }}
-    </div>
-    <div class="p-2">
-        <h4>Социальные сети</h4>
         <p></p>
-        <div class="d-flex flex-wrap">
-            {% for network in networks %}
-            <div class="p-2">
-                <a class="btn btn-outline-secondary" href="{{network.link}}">{{network.network_name}}</a>
+        {% if request.user == user %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user-edit">
+            Редактирование страницы
+        </button>
+        <p></p>
+        <a class="btn btn-outline-secondary" href="{% url 'logout_page' %}">Выход</a>
+        <form method="POST" name="user-info" class="p-2" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal fade" id="user-edit" tabindex="-1" aria-labelledby="user-edit-label"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="user-edit-label">Редактирование страницы</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="input-group mb-3">
+                                <input value="{{ user.username }}" type="text" class="form-control"
+                                       name="username" placeholder="Username"
+                                       autocomplete="username" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input value="{{ user.first_name }}" type="text" class="form-control"
+                                       name="first_name" placeholder="Имя"
+                                       autocomplete="first_name" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input value="{{ user.last_name }}" type="text" class="form-control"
+                                       name="last_name" placeholder="Фамилия"
+                                       autocomplete="last_name" required>
+                            </div>
+                            <div class="input-group">
+                                <textarea name="about_me" class="form-control"
+                                          placeholder="О себе">{{ user.about_me }}</textarea>
+                            </div>
+                            <p></p>
+                            <div class="input-group mb-3">
+                                <input value="{{ user.phone }}" type="text" class="form-control" name="phone"
+                                       placeholder="Телефон"
+                                       autocomplete="phone">
+                            </div>
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="photo">Обновить аватарку</label>
+                                <input type="file" class="form-control" id="photo" placeholder="Аватарка" name="photo"
+                                       accept="image/*">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-primary" name="update_user">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-outline-primary" type="submit" name="update_user">
             </div>
-            {% endfor %}
-        </div>
+        </form>
+        {% endif %}
     </div>
 </div>
+<div class="d-flex flex-wrap">
+    <div class="p-2">
+        <h4>Социальные сети</h4>
+        <div class="mt-2">
+            <div class="d-flex flex-wrap">
+                {% for network in networks %}
+                <div class="p-2">
+                    <a class="btn btn-outline-secondary" href="{{network.link}}">{{network.network_name}}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if request.user == user %}
+        <form method="post" name="social-network" class="">
+
+            {% csrf_token %}
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#add_network">
+                Добавить социальную сеть
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="add_network" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Добавление соц сети</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="network_name"
+                                       placeholder="Название соц сети" maxlength=60 required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="url" class="form-control" name="link" placeholder="Ссылка на профиль"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary" name="add-network">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        {% endif %}
+    </div>
+    {% if request.user == user %}
+    <div class="p-2">
+        <form method="POST" name="notification" class="">
+            {% csrf_token %}
+            <h4>Уведомления</h4>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#notification">
+                Уведомления
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="notification" tabindex="-1" aria-labelledby="notify-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="notify-label">Управление уведомлениями</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="Telegram" name="telegram"
+                                       {% if notification.telegram %} checked {% endif %}>
+                                <label class="form-check-label" for="Telegram">
+                                    Телеграм
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="Mail" name="mail"
+                                       {% if notification.mail %} checked {% endif %}>
+                                <label class="form-check-label" for="Mail">
+                                    Почта
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="notify">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
 {% endblock %}

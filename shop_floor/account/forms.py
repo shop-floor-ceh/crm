@@ -27,21 +27,3 @@ class LoginUserForm(AuthenticationForm):
             'email',
             'password1',
         ]
-
-
-class NotificationSettingForm(ModelForm):
-    class Meta:
-        model = Notification
-        fields = [
-            'mail',
-            'telegram',
-        ]
-
-
-class AddSocialNetwork(ModelForm):
-    class Meta:
-        model = SocialNetworks
-        fields = [
-            'network_name',
-            'link'
-        ]
