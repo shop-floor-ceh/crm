@@ -36,8 +36,8 @@ def unique_project_page(request, project_id):
         context = {'project': project}
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     else:
-        messages.success(request, 'Такого проекта нет')
-        return redirect('/')
+        messages.error(request, 'Такого проекта нет')
+        return redirect('/open_project')
 
 
 def open_project(request):

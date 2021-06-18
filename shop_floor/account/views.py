@@ -15,6 +15,36 @@ from account.utils import token_generator
 import os
 
 
+def profile_page(request, username):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
+    user = Account.objects.get(username=username)
+    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
+    context = {'user': user}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
+
+
+def settings_page(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
+    if request.method == 'POST':
+        user = Account.objects.get(username=request.user.username)
+        notify = Notification.objects.get(user=user)
+        notify.telegram = True if 'telegram' in request.POST else False
+        notify.mail = True if 'mail' in request.POST else False
+        notify.save()
+        messages.success(request, 'Успешно сохранено')
+        return redirect('/settings')
+    user = Account.objects.get(username=request.user.username)
+    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
+    notification = Notification.objects.get(user=user)
+    notify_form = NotificationSettingForm()
+    context = {'notification': notification, 'user': user, 'notify_form': notify_form}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
+
+
 def authorization(request):
     if request.user.is_authenticated:
         messages.success(request, 'Вы уже авторизованны')
@@ -32,14 +62,10 @@ def authorization(request):
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'login.html'), context)
 
 
-# def profile_plug(request):
-#     return redirect('/')
-
-
 def registration(request):
     if request.user.is_authenticated:
         messages.success(request, 'Вы уже авторизованны')
-        return redirect('/profile')
+        return redirect(f'/profile/{request.user.username}')
     if request.method == 'POST':
         user_form = CreateUserForm(request.POST)
         if user_form.is_valid():
@@ -81,53 +107,22 @@ def registration(request):
 
 def logout_def(request):
     logout(request)
-    return redirect('/')
-
-
-def profile_page(request, username):
-    if not request.user.is_authenticated:
-        messages.error(request, 'Вы еще не вошли')
-        return redirect('/login')
-    user = Account.objects.get(username=username)
-    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
-    context = {'user': user}
-    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
-
-
-def settings_page(request):
-    if not request.user.is_authenticated:
-        messages.error(request, 'Вы еще не вошли')
-        return redirect('/login')
-    if request.method == 'POST':
-        user = Account.objects.get(username=request.user.username)
-        notify = Notification.objects.get(user=user)
-
-        notify.telegram = True if 'telegram' in request.POST else False
-        notify.mail = True if 'mail' in request.POST else False
-        notify.save()
-        messages.success(request, 'Успешно сохранено')
-        return redirect('/settings')
-    user = Account.objects.get(username=request.user.username)
-    user.photo.name = '/'.join(user.photo.name.split('/')[1:])
-    notification = Notification.objects.get(user=user)
-    notify_form = NotificationSettingForm()
-    context = {'notification': notification, 'user': user, 'notify_form': notify_form}
-    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
+    return redirect('/login')
 
 
 def verification_email(request, user_id, token):
     if request.user.is_authenticated:
         messages.success(request, 'Вы уже авторизованны')
-        return redirect('/profile')
+        return redirect(f'/profile/{request.user.username}')
     try:
         username = force_text(urlsafe_base64_decode(user_id))
         user = Account.objects.get(username=username)
-        if token_generator.check_token(user, token) and user.is_active:
+        if token_generator.check_token(user, token) and not user.is_active:
             user.is_active = True
             user.save()
             messages.success(request, 'Аккаунт успешко активирован')
             return redirect('/login')
-        messages.success(request, 'Аккаунт по каким-то причинам не был активирован')
+        messages.error(request, 'Аккаунт по каким-то причинам не был активирован')
         return redirect('/login')
     except:
         pass
