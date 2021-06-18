@@ -41,17 +41,24 @@
         </div>
         <input class="btn btn-outline-primary" type="submit" name="update_user">
     </form>
-    <form method="post" name="social-network" class="p-2">
-        <h5>Социальные сети</h5>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" name="network_name"
-                   placeholder="Название соц сети" maxlength=60 required>
-        </div>
-        <div class="input-group mb-3">
-            <input type="url" class="form-control" name="link" placeholder="Ссылка на профиль" required>
-        </div>
-        <input class="btn btn-outline-primary" type="submit" name="notify">
-    </form>
+    <div class="p-2">
+        <form method="post" name="social-network" class="p-2">
+            {% csrf_token %}
+            <h5>Социальные сети</h5>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="network_name"
+                       placeholder="Название соц сети" maxlength=60 required>
+            </div>
+            <div class="input-group mb-3">
+                <input type="url" class="form-control" name="link" placeholder="Ссылка на профиль" required>
+            </div>
+            <input class="btn btn-outline-primary" type="submit" name="notify">
+        </form>
+        {% for network in networks %}
+        <p>{{ network }}</p>
+        {% endfor %}
+    </div>
+
     <form method="POST" name="notification" class="p-2">
         {% csrf_token %}
         <h5>Уведомления</h5>
@@ -74,6 +81,7 @@
         <p></p>
         <input class="btn btn-outline-primary" type="submit" name="notify">
     </form>
+
     <p>
 </div>
 <div class="p-2">

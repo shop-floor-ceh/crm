@@ -27,5 +27,16 @@
         <p></p>
         {{ user.phone }}
     </div>
+    <div class="p-2">
+        <h4>Социальные сети</h4>
+        <p></p>
+        <div class="d-flex flex-wrap">
+            {% for network in networks %}
+            <div class="p-2">
+                <a class="btn btn-outline-secondary" href="{{network.link}}">{{network.network_name}}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 
 from shop_floor.settings import BASE_DIR
-from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm, AddSocialNetwork
+from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm
 from account.models import Account, Notification, SocialNetworks
 from account.utils import token_generator
 
@@ -20,8 +20,9 @@ def profile_page(request, username):
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
     user = Account.objects.get(username=username)
+    networks = SocialNetworks.objects.filter(user=user)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
-    context = {'user': user}
+    context = {'user': user, 'networks': networks}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
 
 
@@ -45,6 +46,11 @@ def settings_page(request):
             user.save()
             messages.success(request, 'Успешно изменено')
             return redirect(f'/profile/{user.username}')
+        elif 'link' in request.POST:
+            network = SocialNetworks(user=request.user, network_name=request.POST['network_name'], link=request.POST['link'])
+            network.save()
+            messages.success(request, 'Успешно добавлено')
+            return redirect('/settings')
         else:
             user = Account.objects.get(username=request.user.username)
             notify = Notification.objects.get(user=user)
@@ -57,12 +63,12 @@ def settings_page(request):
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
     notify_form = NotificationSettingForm()
-    social_networks = AddSocialNetwork()
+    networks = SocialNetworks.objects.filter(user=user)
     context = {
         'notification': notification,
         'user': user,
         'notify_form': notify_form,
-        'social_networks': social_networks
+        'networks': networks,
     }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
 
