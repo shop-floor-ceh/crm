@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from account.models import Account, Notification
+from account.models import Account, Notification, SocialNetworks
 
 
 class CreateUserForm(UserCreationForm):
@@ -35,4 +35,13 @@ class NotificationSettingForm(ModelForm):
         fields = [
             'mail',
             'telegram',
+        ]
+
+
+class AddSocialNetwork(ModelForm):
+    class Meta:
+        model = SocialNetworks
+        fields = [
+            'network_name',
+            'link'
         ]

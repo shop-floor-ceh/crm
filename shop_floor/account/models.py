@@ -80,9 +80,10 @@ class SocialNetworks(models.Model):
 
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     link = models.URLField(verbose_name='link', )
+    network_name = models.CharField(verbose_name='name', max_length=60, default='')
 
     def __str__(self):
-        return f'{self.link}'
+        return f'{self.user} {self.network_name}'
 
 
 class Notification(models.Model):

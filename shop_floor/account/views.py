@@ -8,8 +8,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
 
 from shop_floor.settings import BASE_DIR
-from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm
-from account.models import Account, Notification
+from account.forms import CreateUserForm, LoginUserForm, NotificationSettingForm, AddSocialNetwork
+from account.models import Account, Notification, SocialNetworks
 from account.utils import token_generator
 
 import os
@@ -30,18 +30,40 @@ def settings_page(request):
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
     if request.method == 'POST':
-        user = Account.objects.get(username=request.user.username)
-        notify = Notification.objects.get(user=user)
-        notify.telegram = True if 'telegram' in request.POST else False
-        notify.mail = True if 'mail' in request.POST else False
-        notify.save()
-        messages.success(request, 'Успешно сохранено')
-        return redirect('/settings')
+        if len(request.POST) > 4:
+            user = Account.objects.get(username=request.user.username)
+            if 'username' in request.POST:
+                user.username = request.POST['username']
+            if 'first_name' in request.POST:
+                user.first_name = request.POST['first_name']
+            if 'last_name' in request.POST:
+                user.last_name = request.POST['last_name']
+            if 'about_me' in request.POST:
+                user.about_me = request.POST['about_me']
+            if 'phone' in request.POST:
+                user.phone = request.POST['phone']
+            user.save()
+            messages.success(request, 'Успешно изменено')
+            return redirect(f'/profile/{user.username}')
+        else:
+            user = Account.objects.get(username=request.user.username)
+            notify = Notification.objects.get(user=user)
+            notify.telegram = True if 'telegram' in request.POST else False
+            notify.mail = True if 'mail' in request.POST else False
+            notify.save()
+            messages.success(request, 'Успешно сохранено')
+            return redirect('/settings')
     user = Account.objects.get(username=request.user.username)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
     notify_form = NotificationSettingForm()
-    context = {'notification': notification, 'user': user, 'notify_form': notify_form}
+    social_networks = AddSocialNetwork()
+    context = {
+        'notification': notification,
+        'user': user,
+        'notify_form': notify_form,
+        'social_networks': social_networks
+    }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
 
 
