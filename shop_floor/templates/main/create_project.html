@@ -4,7 +4,7 @@
 <div>
     <h2> Новый проект </h2>
 </div>
-<form method="POST" action="">
+<form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="input-group mb-3">
         <input type="text" class="form-control" name="{{ form.name.name }}" placeholder="Название">

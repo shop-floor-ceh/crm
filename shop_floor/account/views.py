@@ -31,7 +31,7 @@ def settings_page(request):
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
     if request.method == 'POST':
-        if len(request.POST) > 4:
+        if 'update_user' in request.POST:
             user = Account.objects.get(username=request.user.username)
             if 'username' in request.POST:
                 user.username = request.POST['username']
@@ -43,15 +43,17 @@ def settings_page(request):
                 user.about_me = request.POST['about_me']
             if 'phone' in request.POST:
                 user.phone = request.POST['phone']
+            if 'photo' in request.FILES:
+                user.photo = request.FILES['photo']
             user.save()
             messages.success(request, 'Успешно изменено')
             return redirect(f'/profile/{user.username}')
-        elif 'link' in request.POST:
+        elif 'networks' in request.POST:
             network = SocialNetworks(user=request.user, network_name=request.POST['network_name'], link=request.POST['link'])
             network.save()
             messages.success(request, 'Успешно добавлено')
             return redirect('/settings')
-        else:
+        elif 'notify' in request.POST:
             user = Account.objects.get(username=request.user.username)
             notify = Notification.objects.get(user=user)
             notify.telegram = True if 'telegram' in request.POST else False
@@ -64,11 +66,13 @@ def settings_page(request):
     notification = Notification.objects.get(user=user)
     notify_form = NotificationSettingForm()
     networks = SocialNetworks.objects.filter(user=user)
+    test_user_form = CreateUserForm()
     context = {
         'notification': notification,
         'user': user,
         'notify_form': notify_form,
         'networks': networks,
+        'test_user_form': test_user_form
     }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'settings.html'), context)
 
@@ -95,7 +99,7 @@ def registration(request):
         messages.success(request, 'Вы уже авторизованны')
         return redirect(f'/profile/{request.user.username}')
     if request.method == 'POST':
-        user_form = CreateUserForm(request.POST)
+        user_form = CreateUserForm(request.POST, request.FILES)
         if user_form.is_valid():
             user_form.is_active = False
             user = user_form.save()

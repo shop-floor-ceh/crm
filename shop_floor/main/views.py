@@ -75,8 +75,6 @@ def create_project(request):
     if request.method == 'POST':
         form = CreateProjectForm(request.POST, request.FILES)
         if form.is_valid():
-            print(request.FILES)
-            print(request.POST)
             instance = form.save()
             participant = Participant(
                 participant=request.user,
@@ -90,7 +88,6 @@ def create_project(request):
             )
             participant.save()
             instance.participants.add(participant)
-            print(instance)
             return redirect(f'/project/{instance.id}')
         else:
             messages.error(request, 'Что-то пошло не так попробуй еще раз')

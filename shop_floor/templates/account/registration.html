@@ -4,10 +4,8 @@
 <div>
     <h2>Регистрация</h2>
 </div>
-<form method="POST" action="">
-
+<form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
-
     <div class="input-group mb-3">
         <input value="{{ form.cleaned_data.email }}" type="email" class="form-control" name="{{ form.email.name }}" placeholder="Email"
                autocomplete="email" required>
