@@ -7,11 +7,15 @@
 <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="{{ form.name.name }}" placeholder="Название">
+        <label>
+            <input type="text" class="form-control" name="{{ form.name.name }}" placeholder="Название">
+        </label>
     </div>
     <div class="input-group">
         <label class="input-group-text" for="admin">О проекте</label>
-        <textarea name="about_project" class="form-control" placeholder="Краткое описание" required></textarea>
+        <label>
+            <textarea name="about_project" class="form-control" placeholder="Краткое описание" required></textarea>
+        </label>
     </div>
     <p></p>
     <div class="input-group mb-3">

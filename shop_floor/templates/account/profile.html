@@ -8,7 +8,7 @@
     <div class="p-2">
         {% if user.photo %}
         <p>
-            <img src="/{{ user.photo }}" width="380px">
+            <img src="/{{ user.photo }}" alt="Не загрузилась" width="380px">
         </p>
         {% endif %}
     </div>
@@ -40,29 +40,40 @@
                         <div class="modal-body">
 
                             <div class="input-group mb-3">
-                                <input value="{{ user.username }}" type="text" class="form-control"
-                                       name="username" placeholder="Username"
-                                       autocomplete="username" required>
+                                <label>
+                                    <input value="{{ user.username }}" type="text" class="form-control"
+                                           name="username" placeholder="Username"
+                                           autocomplete="username" required>
+                                </label>
                             </div>
                             <div class="input-group mb-3">
-                                <input value="{{ user.first_name }}" type="text" class="form-control"
-                                       name="first_name" placeholder="Имя"
-                                       autocomplete="first_name" required>
+                                <label>
+                                    <input value="{{ user.first_name }}" type="text" class="form-control"
+                                           name="first_name" placeholder="Имя"
+                                           autocomplete="first_name" required>
+                                </label>
                             </div>
                             <div class="input-group mb-3">
-                                <input value="{{ user.last_name }}" type="text" class="form-control"
-                                       name="last_name" placeholder="Фамилия"
-                                       autocomplete="last_name" required>
+                                <label>
+                                    <input value="{{ user.last_name }}" type="text" class="form-control"
+                                           name="last_name" placeholder="Фамилия"
+                                           autocomplete="last_name" required>
+                                </label>
                             </div>
                             <div class="input-group">
-                                <textarea name="about_me" class="form-control"
-                                          placeholder="О себе">{{ user.about_me }}</textarea>
+                                <label>
+                                    <textarea name="about_me" class="form-control" placeholder="О себе">
+                                        {{ user.about_me }}
+                                    </textarea>
+                                </label>
                             </div>
                             <p></p>
                             <div class="input-group mb-3">
-                                <input value="{{ user.phone }}" type="text" class="form-control" name="phone"
-                                       placeholder="Телефон"
-                                       autocomplete="phone">
+                                <label>
+                                    <input value="{{ user.phone }}" type="text" class="form-control" name="phone"
+                                           placeholder="Телефон"
+                                           autocomplete="phone">
+                                </label>
                             </div>
                             <div class="input-group mb-3">
                                 <label class="input-group-text" for="photo">Обновить аватарку</label>
@@ -114,12 +125,16 @@
                         </div>
                         <div class="modal-body">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" name="network_name"
-                                       placeholder="Название соц сети" maxlength=60 required>
+                                <label>
+                                    <input type="text" class="form-control" name="network_name"
+                                           placeholder="Название соц сети" maxlength=60 required>
+                                </label>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="url" class="form-control" name="link" placeholder="Ссылка на профиль"
-                                       required>
+                                <label>
+                                    <input type="url" class="form-control" name="link" placeholder="Ссылка на профиль"
+                                           required>
+                                </label>
                             </div>
                         </div>
                         <div class="modal-footer">
