@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 import os
 
 from main.models import Project, Participant
-from main.forms import CreateProjectForm
+from main.forms import CreateProjectForm, CreateParticipantForm
 from account.models import Account
 from shop_floor.settings import BASE_DIR
 
@@ -49,6 +49,7 @@ def unique_project_page(request, project_id):
             project.participants.add(participant)
             return redirect(f'/project/{project_id}')
     try:
+        form = CreateParticipantForm()
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
@@ -56,6 +57,7 @@ def unique_project_page(request, project_id):
         project.directors_script.name = '/'.join(project.directors_script.name.split('/')[1:])
         context = {
             'project': project,
+            'form': form
         }
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     except:

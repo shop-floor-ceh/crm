@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from main.models import Project
+from main.models import Project, Participant
 
 
 class CreateProjectForm(ModelForm):
@@ -15,4 +15,20 @@ class CreateProjectForm(ModelForm):
             'ended',
             'about_project',
             'admin',
+        ]
+
+
+class CreateParticipantForm(ModelForm):
+    class Meta:
+        model = Participant
+        fields = [
+            'participant',
+            'name',
+            'can_change_main_information',
+            'can_add_participant',
+            'can_change_synopsis',
+            'can_change_literary_script',
+            'can_change_directors_scripts',
+            'can_change_kpp',
+            'can_add_dates'
         ]
