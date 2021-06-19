@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %} {% endblock %}</title>
-    <!-- Yandex.Metrika counter -->
-    <script src="/static/js/main.js"></script>
-    <noscript>
-        <div><img src="https://mc.yandex.ru/watch/80900842" style="position:absolute; left:-9999px;" alt=""/></div>
-    </noscript>
-    <!-- /Yandex.Metrika counter -->
+<!--     Yandex.Metrika counter -->
+<!--    <script src="/static/js/yandex.js"></script>-->
+<!--    <noscript>-->
+<!--        <div><img src="https://mc.yandex.ru/watch/80900842" style="position:absolute; left:-9999px;" alt=""/></div>-->
+<!--    </noscript>-->
+<!--     /Yandex.Metrika counter -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'logo.png' %}">
@@ -93,9 +93,9 @@
     {% block content %}
     {% endblock %}
 </div>
+<script src="/static/js/main.js"></script>
 <script src="/static/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
-<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

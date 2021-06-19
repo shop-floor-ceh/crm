@@ -67,9 +67,7 @@
                             </div>
                             <div class="input-group">
                                 <label>
-                                    <textarea name="about_me" class="form-control" placeholder="О себе">
-                                        {{ user.about_me }}
-                                    </textarea>
+                                    <textarea name="about_me" class="form-control" placeholder="О себе">{{ user.about_me }}</textarea>
                                 </label>
                             </div>
                             <p></p>
@@ -115,9 +113,7 @@
         </div>
         {% if request.user == user %}
         <form method="post" name="social-network" class="">
-
             {% csrf_token %}
-
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#add_network">
                 Добавить социальную сеть
@@ -148,7 +144,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-primary" name="add-network">Сохранить</button>
+                            <button type="submit" class="btn btn-primary" name="add-network">Добавить</button>
                         </div>
                     </div>
                 </div>
@@ -162,42 +158,36 @@
         <form method="POST" name="notification" class="">
             {% csrf_token %}
             <h4>Уведомления</h4>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#notification">
-                Уведомления
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="notification" tabindex="-1" aria-labelledby="notify-label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="notify-label">Управление уведомлениями</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Telegram" name="telegram"
-                                       {% if notification.telegram %} checked {% endif %}>
-                                <label class="form-check-label" for="Telegram">
-                                    Телеграм
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Mail" name="mail"
-                                       {% if notification.mail %} checked {% endif %}>
-                                <label class="form-check-label" for="Mail">
-                                    Почта
-                                </label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="notify">Save changes</button>
-                        </div>
-                    </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="myCheckbox" name="telegram"
+                       onclick="myFunction()"
+                       {% if notification.telegram %} checked {% endif %}>
+                <label class="form-check-label">
+                    <strong>Телеграм</strong>
+                </label>
+                <div class="mt-2" id="checkInput">
+                    <p>Напиши этому <a href="https://t.me/chatid_echo_bot">боту</a> и введи свой id</p>
+                    <p>И конечно же у тебя должен быть запущен этот <a href="https://t.me/tseh_notify_bot">бот</a>
+                        (просто напиши ему)</p>
+                    <p>
+                        <label>
+                            <input type="number" class="form-control" name="telegram-id" value="{{ user.telegram_id }}"
+                                   placeholder="Telegram id" maxlength=60 required>
+                        </label>
+                    </p>
                 </div>
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="Mail" name="mail"
+                       {% if notification.mail %} checked {% endif %}>
+                <label class="form-check-label" for="Mail">
+                    <strong>Почта</strong>
+                </label>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary" name="notify">Сохранить изменения</button>
         </form>
     </div>
     {% endif %}

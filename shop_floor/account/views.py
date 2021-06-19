@@ -65,6 +65,8 @@ def profile_page(request, username):
             notify.telegram = True if 'telegram' in request.POST else False
             notify.mail = True if 'mail' in request.POST else False
             notify.save()
+            user.telegram_id = int(request.POST['telegram-id']) if 'telegram' in request.POST else user.telegram_id
+            user.save()
             messages.success(request, 'Успешно сохранено')
             return redirect(f'/profile/{user.username}')
     user = Account.objects.get(username=username)
