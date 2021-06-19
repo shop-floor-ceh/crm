@@ -17,6 +17,17 @@ from account.utils import token_generator
 import os
 
 
+def return_correct_phone(phone):
+    phone = str(phone)
+    if phone[0] == '9':
+        phone = '+7' + phone
+    elif phone[0] == '8':
+        phone = '+7' + phone[1:]
+    elif phone[0] == '7':
+        phone = '+' + phone
+    return phone
+
+
 def all_profiles(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
@@ -70,11 +81,11 @@ def profile_page(request, username):
             messages.success(request, 'Успешно сохранено')
             return redirect(f'/profile/{user.username}')
     user = Account.objects.get(username=username)
+    user.phone = return_correct_phone(user.phone)
     participants = Participant.objects.filter(participant=user)
     projects = set()
     for i in participants:
         x = Project.objects.filter(participants=i)
-
         if x:
             if type(x) is QuerySet:
                 for j in list(x):
@@ -88,7 +99,7 @@ def profile_page(request, username):
         'user': user,
         'networks': networks,
         'notification': notification,
-        'projects':projects
+        'projects': projects
     }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
 

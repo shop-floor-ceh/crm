@@ -23,7 +23,9 @@
             </a>
         </p>
         <p>
-            {{ user.phone }}
+            <a href="tel:{{ user.phone }}">
+                {{ user.phone }}
+            </a>
         </p>
         <p></p>
         {% if request.user == user %}
@@ -166,19 +168,24 @@
                 <label class="form-check-label">
                     <strong>Телеграм</strong>
                 </label>
-                <div class="mt-2" id="checkInput">
-                    <p>Напиши этому <a href="https://t.me/chatid_echo_bot">боту</a> и введи свой id</p>
-                    <p>И конечно же у тебя должен быть запущен этот <a href="https://t.me/tseh_notify_bot">бот</a>
-                        (просто напиши ему)</p>
-                    <p>
-                        <label>
-                            <input type="number" class="form-control" name="telegram-id" value="{{ user.telegram_id }}"
-                                   placeholder="Telegram id" maxlength=60 required>
-                        </label>
-                    </p>
+                <div class="mt-2" id="checkInput" style="display:none">
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        Напиши этому <a href="https://t.me/chatid_echo_bot">боту</a> и введи свой id
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        И конечно же у тебя должен быть запущен этот <a href="https://t.me/tseh_notify_bot">бот</a>
+                        (просто напиши ему)
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <label>
+                        <input type="number" class="form-control" name="telegram-id" value="{{ user.telegram_id }}"
+                               placeholder="Telegram id" maxlength=60 required>
+                    </label>
                 </div>
             </div>
-            <div class="form-check">
+            <div class="form-check mt-2">
                 <input class="form-check-input" type="checkbox" value="" id="Mail" name="mail"
                        {% if notification.mail %} checked {% endif %}>
                 <label class="form-check-label" for="Mail">
@@ -187,7 +194,7 @@
             </div>
 
 
-            <button type="submit" class="btn btn-primary" name="notify">Сохранить изменения</button>
+            <button type="submit" class="btn btn-primary mt-2" name="notify">Сохранить изменения</button>
         </form>
     </div>
     {% endif %}

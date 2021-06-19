@@ -19,7 +19,6 @@ def main_page(request):
     projects = set()
     for i in participants:
         x = Project.objects.filter(participants=i)
-
         if x:
             if type(x) is QuerySet:
                 for j in list(x):
@@ -44,20 +43,48 @@ def unique_project_page(request, project_id):
                 can_change_directors_scripts=True if 'can_change_directors_scripts' in request.POST else False,
                 can_change_kpp=True if 'can_change_kpp' in request.POST else False,
                 can_add_dates=True if 'can_add_dates' in request.POST else False,
-
             )
             project.participants.add(participant)
             return redirect(f'/project/{project_id}')
     try:
         form = CreateParticipantForm()
+
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
         project.literary_script.name = '/'.join(project.literary_script.name.split('/')[1:])
         project.directors_script.name = '/'.join(project.directors_script.name.split('/')[1:])
+
+        user = request.user
+        if project.admin == user:
+            user.can_change_main_information = True
+            user.can_add_participant = True
+            user.can_change_synopsis = True
+            user.can_change_literary_script = True
+            user.can_change_directors_scripts = True
+            user.can_change_kpp = True
+            user.can_add_dates = True
+        else:
+            user.can_change_main_information = False
+            user.can_add_participant = False
+            user.can_change_synopsis = False
+            user.can_change_literary_script = False
+            user.can_change_directors_scripts = False
+            user.can_change_kpp = False
+            user.can_add_dates = False
+        for participant in project.participants.all():
+            if participant.participant == user:
+                user.can_change_main_information = True if participant.can_change_main_information else user.can_change_main_information
+                user.can_add_participant = True if participant.can_add_participant else user.can_add_participant
+                user.can_change_synopsis = True if participant.can_change_synopsis else user.can_change_synopsis
+                user.can_change_literary_script = True if participant.can_change_literary_script else user.can_change_literary_script
+                user.can_change_directors_scripts = True if participant.can_change_directors_scripts else user.can_change_directors_scripts
+                user.can_change_kpp = True if participant.can_change_kpp else user.can_change_kpp
+                user.can_add_dates = True if participant.can_add_dates else user.can_add_dates
         context = {
             'project': project,
-            'form': form
+            'form': form,
+            'user': user
         }
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     except:

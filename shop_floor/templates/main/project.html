@@ -16,6 +16,7 @@
             <a class="btn btn-primary" href="/profile/{{participant.participant.username }}">{{ participant.name }}</a>
         </p>
         {% endfor %}
+        {% if user.can_add_participant %}
         <p>
             <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-participant">+</a>
         </p>
@@ -96,6 +97,7 @@
 
             </div>
         </form>
+        {% endif %}
     </div>
     <div class="p-2">
         <h4>Файлы проекта</h4>
@@ -125,29 +127,89 @@
         {% endif %}
     </div>
 </div>
+{% if user.can_change_main_information or user.can_change_synopsis or user.can_change_literary_script or user.can_change_directors_scripts or user.can_change_kpp %}
 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#project-edit">
     Редактирование проекта
 </button>
-<form method="post" action="" name="change-info">
+<form method="post" action="" name="change-info" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="modal fade" id="project-edit" tabindex="-1" aria-labelledby="project-edit-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="project-edit-label">Modal title</h5>
+                    <h4 class="modal-title" id="project-edit-label">Редактирование проекта</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    {% if user.can_change_main_information %}
+                    <h5>Основная информация</h5>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Название</label>
+                        <label>
+                            <input type="text" class="form-control" name="name" placeholder="Название"
+                                   value="{{ project.name }}" required>
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-group-text">О проекте</label>
+                        <label>
+                            <textarea name="about_project" class="form-control" placeholder="Краткое описание"
+                                      required>{{ project.about_project }}</textarea>
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" value="" id="open_to_join" name="open_to_join"
+                               checked>
+                        <label class="form-check-label" for="open_to_join">
+                            Открыт для входа
+                        </label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" value="" id="ended" name="ended">
+                        <label class="form-check-label" for="ended">
+                            Завершен
+                        </label>
+                    </div>
+                    <hr>
+                    {% endif %}
+                    {% if user.can_change_synopsis %}
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="synopsis">Синопсис</label>
+                        <input type="file" class="form-control" id="synopsis" placeholder="Синопсис" name="synopsis">
+                    </div>
+                    {% endif %}
+                    {% if user.can_change_literary_script %}
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="literary_script">Лит сценарий</label>
+                        <input type="file" class="form-control" id="literary_script" placeholder="Литературный сценарий"
+                               name="literary_script">
+                    </div>
+                    {% endif %}
+                    {% if user.can_change_directors_scripts %}
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="directors_script">Реж сценарий</label>
+                        <input type="file" class="form-control" id="directors_script"
+                               placeholder="Режиссерский сценарий"
+                               name="directors_script">
+                    </div>
+                    {% endif %}
+                    {% if user.can_change_kpp %}
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="kpp">КПП</label>
+                        <input type="file" class="form-control" id="kpp" placeholder="Календарно-постановочный план"
+                               name="kpp">
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>
         </div>
     </div>
-
 </form>
+{% endif %}
 <div class="p-2">
     <h4>Календарь</h4>
 </div>
