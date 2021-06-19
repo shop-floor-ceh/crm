@@ -10,6 +10,7 @@ class Participant(models.Model):
 
     participant = models.ForeignKey(verbose_name='Участник', to=Account, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя роли', max_length=120)
+    can_change_main_information = models.BooleanField(verbose_name='Может менять основную информацию', default=False)
     can_add_participant = models.BooleanField(verbose_name='Может добавлять новых участников', default=False)
     can_change_synopsis = models.BooleanField(verbose_name='Может менять синопсис', default=False)
     can_change_literary_script = models.BooleanField(verbose_name='Может менять лит сценарий', default=False)

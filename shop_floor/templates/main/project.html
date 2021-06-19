@@ -2,4 +2,154 @@
 {% block title %} {{ project }} {% endblock %}
 {% block content %}
 <h2> {{ project }} </h2>
+<div class="d-flex flex-wrap">
+    <div class="p-2">
+        <h4>Участники и основная информация</h4>
+        <h5>Основная информация</h5>
+        <p> {{ project.about_project }}</p>
+        <p>Создатель проекта:
+            <a href="/profile/{{ project.admin.username }}">{{ project.admin }}</a>
+        </p>
+        <h5>Участники</h5>
+        {% for participant in project.participants.all %}
+        <p>
+            <a class="btn btn-primary" href="/profile/{{participant.participant.username }}">{{ participant.name }}</a>
+        </p>
+        {% endfor %}
+        <p>
+            <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#add-participant">+</a>
+        </p>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="modal fade" id="add-participant" aria-labelledby="add-participant-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="add-participant-label">Добавить участника</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <h5>Участник</h5>
+                            {{ form.participant }}
+                            {{ form.name }}
+                            <hr>
+                            <h5>Права</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_change_main_information"
+                                       name="can_change_main_information">
+                                <label class="form-check-label" for="id_can_change_main_information">
+                                    Менять основную информацию
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_change_synopsis"
+                                       name="can_change_synopsis">
+                                <label class="form-check-label" for="id_can_change_synopsis">
+                                    Менять синопсис
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_change_literary_script"
+                                       name="can_change_literary_script">
+                                <label class="form-check-label" for="id_can_change_literary_script">
+                                    Менять литературный сценарий
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_change_directors_scripts"
+                                       name="can_change_directors_scripts">
+                                <label class="form-check-label" for="id_can_change_directors_scripts">
+                                    Менять режисерский сценарий
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_change_kpp"
+                                       name="can_change_kpp">
+                                <label class="form-check-label" for="id_can_change_kpp">
+                                    Менять календарно-постановочный план
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_add_participant"
+                                       name="can_add_participant">
+                                <label class="form-check-label" for="id_can_add_participant">
+                                    Добавлять новых участников
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id_can_add_dates"
+                                       name="can_add_dates">
+                                <label class="form-check-label" for="id_can_add_dates">
+                                    Добавлять даты встреч
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary" name="add-participants">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="p-2">
+        <h4>Файлы проекта</h4>
+        {% if project.synopsis or project.kpp or project.literary_script or project.directors_script %}
+        {% if project.synopsis %}
+        <p>Синопсис:</p>
+        <a class="btn btn-primary" href="/{{ project.synopsis.name }}">Открыть в браузере</a>
+        <a class="btn btn-primary" href="/{{ project.synopsis.name }}" download>Скачать</a>
+        {% endif %}
+        {% if project.literary_script %}
+        <p class="mt-2">Литературный сценарий:</p>
+        <a class="btn btn-primary" href="/{{ project.literary_script.name }}">Открыть в браузере</a>
+        <a class="btn btn-primary" href="/{{ project.literary_script.name }}" download>Скачать</a>
+        {% endif %}
+        {% if project.directors_script %}
+        <p class="mt-2">Режиссерский сценарий:</p>
+        <a class="btn btn-primary" href="/{{ project.directors_script.name }}">Открыть в браузере</a>
+        <a class="btn btn-primary" href="/{{ project.directors_script.name }}" download>Скачать</a>
+        {% endif %}
+        {% if project.kpp %}
+        <p class="mt-2">Календарно-постановочный план:</p>
+        <a class="btn btn-primary" href="/{{ project.kpp.name }}">Открыть в браузере</a>
+        <a class="btn btn-primary" href="/{{ project.kpp.name }}" download>Скачать</a>
+        {% endif %}
+        {% else %}
+        <p>Пока не загружен ни один файл</p>
+        {% endif %}
+    </div>
+</div>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#project-edit">
+    Редактирование проекта
+</button>
+<form method="post" action="" name="change-info">
+    <div class="modal fade" id="project-edit" tabindex="-1" aria-labelledby="project-edit-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="project-edit-label">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<div class="p-2">
+    <h4>Календарь</h4>
+</div>
+
 {% endblock %}

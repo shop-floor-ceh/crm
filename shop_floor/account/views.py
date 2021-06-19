@@ -6,13 +6,23 @@ from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import reverse
+from django.db.models.query import QuerySet
 
 from shop_floor.settings import BASE_DIR
+from main.models import Project, Participant
 from account.forms import CreateUserForm, LoginUserForm
 from account.models import Account, Notification, SocialNetworks
 from account.utils import token_generator
 
 import os
+
+
+def all_profiles(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Вы еще не вошли')
+        return redirect('/login')
+    context = {}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'all_profiles.html'), context)
 
 
 def profile_page(request, username):
@@ -58,6 +68,17 @@ def profile_page(request, username):
             messages.success(request, 'Успешно сохранено')
             return redirect(f'/profile/{user.username}')
     user = Account.objects.get(username=username)
+    participants = Participant.objects.filter(participant=user)
+    projects = set()
+    for i in participants:
+        x = Project.objects.filter(participants=i)
+
+        if x:
+            if type(x) is QuerySet:
+                for j in list(x):
+                    projects.add(j)
+            else:
+                projects.add(x)
     networks = SocialNetworks.objects.filter(user=user)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
     notification = Notification.objects.get(user=user)
@@ -65,6 +86,7 @@ def profile_page(request, username):
         'user': user,
         'networks': networks,
         'notification': notification,
+        'projects':projects
     }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
 

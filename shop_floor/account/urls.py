@@ -8,4 +8,5 @@ urlpatterns = [
     # url(r'profile/(?P<username>[a-zA-Z0-9]+)$', views.profile_page, name='profile_page'),
     path('activate/<user_id>/<token>', views.verification_email, name='activate'),
     path('profile/<username>', views.profile_page, name='profile_page'),
+    path('profile', views.all_profiles, name='all_profiles'),
 ]
