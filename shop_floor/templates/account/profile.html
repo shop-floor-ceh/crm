@@ -1,5 +1,5 @@
 {% extends 'extends/index.html' %}
-{% block title %} Profile {% endblock %}
+{% block title %} {{ user }} {% endblock %}
 {% block content %}
 <div>
     <h2>Профиль</h2>
@@ -14,12 +14,17 @@
     {% endif %}
     <div class="p-2">
         <h4>{{ user }}</h4>
-        <p></p>
-        {{ user.about_me }}
-        <p></p>
-        {{ user.email }}
-        <p></p>
-        {{ user.phone }}
+        <p>
+            {{ user.about_me }}
+        </p>
+        <p>
+            <a href="mailto:{{ user.email }}">
+                {{ user.email }}
+            </a>
+        </p>
+        <p>
+            {{ user.phone }}
+        </p>
         <p></p>
         {% if request.user == user %}
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user-edit">
