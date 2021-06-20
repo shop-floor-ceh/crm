@@ -12,20 +12,9 @@ from shop_floor.settings import BASE_DIR
 from main.models import Project, Participant
 from account.forms import CreateUserForm, LoginUserForm
 from account.models import Account, Notification, SocialNetworks
-from account.utils import token_generator
+from account.utils import token_generator, check_telegram_id, return_correct_phone
 
 import os
-
-
-def return_correct_phone(phone):
-    phone = str(phone)
-    if phone[0] == '9':
-        phone = '+7' + phone
-    elif phone[0] == '8':
-        phone = '+7' + phone[1:]
-    elif phone[0] == '7':
-        phone = '+' + phone
-    return phone
 
 
 def all_profiles(request):
@@ -73,11 +62,19 @@ def profile_page(request, username):
         elif 'notify' in request.POST:
             user = Account.objects.get(username=request.user.username)
             notify = Notification.objects.get(user=user)
-            notify.telegram = True if 'telegram' in request.POST else False
+
+            if 'telegram' in request.POST:
+                if check_telegram_id(int(request.POST['telegram-id'])):
+                    notify.telegram = True
+                    user.telegram_id = int(request.POST['telegram-id'])
+                    user.save()
+                else:
+                    messages.error(request, 'Не получилось проверить телеграм id')
+            else:
+                notify.telegram = False
             notify.mail = True if 'mail' in request.POST else False
             notify.save()
-            user.telegram_id = int(request.POST['telegram-id']) if 'telegram' in request.POST else user.telegram_id
-            user.save()
+
             messages.success(request, 'Успешно сохранено')
             return redirect(f'/profile/{user.username}')
     user = Account.objects.get(username=username)

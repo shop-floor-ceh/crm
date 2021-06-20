@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 import os
 
 from main.models import Project, Participant
-from main.forms import CreateProjectForm, CreateParticipantForm
+from main.forms import CreateProjectForm
 from account.models import Account
 from shop_floor.settings import BASE_DIR
 
@@ -46,15 +46,38 @@ def unique_project_page(request, project_id):
             )
             project.participants.add(participant)
             return redirect(f'/project/{project_id}')
+        if 'edit-project' in request.POST:
+            project = Project.objects.get(pk=project_id)
+            if 'name' in request.POST:
+                project.name = request.POST['name']
+            if 'about_project' in request.POST:
+                project.about_project = request.POST['about_project']
+            project.open_to_join = True if 'open_to_join' in request.POST else False
+            project.ended = True if 'ended' in request.POST else False
+
+            if 'synopsis' in request.FILES:
+                project.synopsis = request.FILES['synopsis']
+            if 'literary_script' in request.FILES:
+                project.literary_script = request.FILES['literary_script']
+            if 'directors_script' in request.FILES:
+                project.directors_script = request.FILES['directors_script']
+            if 'kpp' in request.FILES:
+                project.kpp = request.FILES['kpp']
+            try:
+                project.save()
+                messages.success(request, 'Успешно изменено')
+                return redirect(f'/project/{project_id}')
+            except:
+                messages.error(request, 'Что-то пошло не так')
+                return redirect(f'/project/{project_id}')
     try:
-        form = CreateParticipantForm()
 
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
         project.literary_script.name = '/'.join(project.literary_script.name.split('/')[1:])
         project.directors_script.name = '/'.join(project.directors_script.name.split('/')[1:])
-
+        all_users = Account.objects.all()
         user = request.user
         if project.admin == user:
             user.can_change_main_information = True
@@ -74,17 +97,24 @@ def unique_project_page(request, project_id):
             user.can_add_dates = False
         for participant in project.participants.all():
             if participant.participant == user:
-                user.can_change_main_information = True if participant.can_change_main_information else user.can_change_main_information
-                user.can_add_participant = True if participant.can_add_participant else user.can_add_participant
-                user.can_change_synopsis = True if participant.can_change_synopsis else user.can_change_synopsis
-                user.can_change_literary_script = True if participant.can_change_literary_script else user.can_change_literary_script
-                user.can_change_directors_scripts = True if participant.can_change_directors_scripts else user.can_change_directors_scripts
-                user.can_change_kpp = True if participant.can_change_kpp else user.can_change_kpp
-                user.can_add_dates = True if participant.can_add_dates else user.can_add_dates
+                user.can_change_main_information = \
+                    True if participant.can_change_main_information else user.can_change_main_information
+                user.can_add_participant = \
+                    True if participant.can_add_participant else user.can_add_participant
+                user.can_change_synopsis = \
+                    True if participant.can_change_synopsis else user.can_change_synopsis
+                user.can_change_literary_script = \
+                    True if participant.can_change_literary_script else user.can_change_literary_script
+                user.can_change_directors_scripts = \
+                    True if participant.can_change_directors_scripts else user.can_change_directors_scripts
+                user.can_change_kpp = \
+                    True if participant.can_change_kpp else user.can_change_kpp
+                user.can_add_dates = \
+                    True if participant.can_add_dates else user.can_add_dates
         context = {
             'project': project,
-            'form': form,
-            'user': user
+            'user': user,
+            'all_users': all_users
         }
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     except:

@@ -30,10 +30,21 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-
                             <h5>Участник</h5>
-                            <p>{{ form.participant }}</p>
-                            <p>{{ form.name }}</p>
+
+                            <select class="form-select" aria-label="Default select example" required>
+                                <option selected>Выбери пользователя</option>
+                                {% for i in all_users %}
+                                <option value="{{ i.id }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group mb-3 mt-2">
+                                <label class="input-group-text">Роль</label>
+                                <label>
+                                    <input type="text" class="form-control" name="name" placeholder="Например режиссер"
+                                           maxlength="120" required>
+                                </label>
+                            </div>
                             <hr>
                             <h5>Права</h5>
                             <div class="form-check form-switch">
@@ -203,7 +214,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" name="edit-project">Сохранить</button>
                 </div>
             </div>
         </div>

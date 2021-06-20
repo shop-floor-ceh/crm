@@ -14,20 +14,21 @@
     {% endif %}
     <div class="p-2">
         <h4>{{ user }}</h4>
-        <p>
-            {{ user.about_me }}
-        </p>
-        <p>
-            <a href="mailto:{{ user.email }}">
-                {{ user.email }}
-            </a>
-        </p>
-        <p>
-            <a href="tel:{{ user.phone }}">
-                {{ user.phone }}
-            </a>
-        </p>
-        <p></p>
+        <div class="shadow p-2 mb-3 bg-body rounded mt-2">
+            <p>
+                О себе: {{ user.about_me }}
+            </p>
+            <p>
+                <a href="mailto:{{ user.email }}">
+                    {{ user.email }}
+                </a>
+            </p>
+            <p>
+                <a href="tel:{{ user.phone }}">
+                    {{ user.phone }}
+                </a>
+            </p>
+        </div>
         {% if request.user == user %}
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#user-edit">
             Редактирование страницы
