@@ -32,7 +32,7 @@
                         <div class="modal-body">
                             <h5>Участник</h5>
 
-                            <select class="form-select" aria-label="Default select example" required>
+                            <select class="form-select" aria-label="Default select example" name="participant" required>
                                 <option selected>Выбери пользователя</option>
                                 {% for i in all_users %}
                                 <option value="{{ i.id }}">{{ i }}</option>
