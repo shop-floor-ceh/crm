@@ -49,7 +49,9 @@ def unique_project_page(request, project_id):
                 can_add_dates=True if 'can_add_dates' in request.POST else False,
             )
             project.participants.add(participant)
+            messages.success(request, 'Участник успешно добавлен')
             return redirect(f'/project/{project_id}')
+
         if 'edit-project' in request.POST:
             project = Project.objects.get(pk=project_id)
             if 'name' in request.POST:
@@ -67,13 +69,15 @@ def unique_project_page(request, project_id):
                 project.directors_script = request.FILES['directors_script']
             if 'kpp' in request.FILES:
                 project.kpp = request.FILES['kpp']
+
             try:
                 project.save()
-                messages.success(request, 'Успешно изменено')
+                messages.success(request, 'Проект изменено изменен')
                 return redirect(f'/project/{project_id}')
             except:
                 messages.error(request, 'Что-то пошло не так')
                 return redirect(f'/project/{project_id}')
+
         if 'add-date' in request.POST:
             date = Date.objects.create(
                 project=Project.objects.get(id=project_id),
@@ -87,6 +91,7 @@ def unique_project_page(request, project_id):
             date.save()
             messages.success(request, 'Дата успешно добавлена')
             return redirect(f'/project/{project_id}')
+
         if 'edit-date' in request.POST:
             date = Date.objects.get(id=request.POST['edit-date'])
             date.visiting_date = request.POST['visiting_date']
@@ -96,7 +101,17 @@ def unique_project_page(request, project_id):
             date.scene = request.POST['scene']
             date.notify_send = False
             date.save()
+            messages.success(request, 'Дата успешна изменена')
             return redirect(f'/project/{project_id}')
+
+        if 'del-date' in request.POST:
+            Date.objects.get(id=request.POST['del-date']).delete()
+            messages.success(request, 'Дата успешна удалена')
+            return redirect(f'/project/{project_id}')
+
+        if 'del-project' in request.POST:
+            return redirect(f'/project/{project_id}/delete')
+
     try:
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
@@ -206,3 +221,16 @@ def calendar(request):
                 dates.add(proj_dates)
     context = {'dates': dates}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'calendar.html'), context)
+
+
+def del_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    if project.admin != request.user:
+        messages.error(request, 'Вы не админ этого проекта')
+        return redirect(f'/project/{project_id}')
+    if request.method == 'POST':
+        project.delete()
+        messages.success(request, 'Проект успешно удален')
+        return redirect('/')
+    context = {'project': project}
+    return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'delete.html'), context)

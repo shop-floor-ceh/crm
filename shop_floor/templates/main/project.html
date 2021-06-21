@@ -214,6 +214,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    {% if project.admin == request.user %}
+                    <button type="submit" class="btn btn-danger" name="del-project">Удалить проект</button>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary" name="edit-project">Сохранить</button>
                 </div>
             </div>
@@ -291,6 +294,9 @@
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                             Закрыть
                                         </button>
+                                        <button type="submit" class="btn btn-danger" name="del-date"
+                                                value="{{ date.id }}">Удалить дату
+                                        </button>
                                         <button type="submit" class="btn btn-primary" name="edit-date"
                                                 value="{{ date.id }}">Изменить
                                         </button>
@@ -350,6 +356,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
                     <button type="submit" class="btn btn-primary" name="add-date">Добавить</button>
                 </div>
             </div>

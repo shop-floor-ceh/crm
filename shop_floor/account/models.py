@@ -57,7 +57,7 @@ class Account(AbstractBaseUser):
     phone = models.CharField(verbose_name='phone', max_length=15, blank=True, default=0)
     photo = models.ImageField(verbose_name='photo', blank=True, default='', upload_to='account/static/profile')
     about_me = models.TextField(verbose_name='about me', blank=True, default='')
-    mail_notify = models.BooleanField(verbose_name='mail', default=False)
+    mail_notify = models.BooleanField(verbose_name='mail', default=True)
     telegram_notify = models.BooleanField(verbose_name='telegram', default=False)
     vk = models.BooleanField(verbose_name='vk', default=False)
     telegram_id = models.BigIntegerField(verbose_name='telegram id', blank=True, default=0)

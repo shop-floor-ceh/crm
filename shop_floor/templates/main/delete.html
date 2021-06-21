@@ -1,0 +1,12 @@
+{% extends 'extends/index.html' %}
+{% block title %} Удаление {{ project }} {% endblock %}
+{% block content %}
+<h4> Вы точно хотите удалить проект {{ project }}?</h4>
+<div class="modal-footer">
+    <a type="button" class="btn btn-secondary" data-bs-dismiss="modal" href="/project/{{project.id}}">нет</a>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" name="del-project">да</button>
+    </form>
+</div>
+{% endblock %}
