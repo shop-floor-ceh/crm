@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.db.models.query import QuerySet
 
 import os
+import datetime
 
 from main.models import Project, Participant, Date
 from main.forms import CreateProjectForm
@@ -195,5 +196,13 @@ def calendar(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
-    context = {}
+    participants = Participant.objects.filter(participant=request.user)
+    dates = set()
+    for i in participants:
+        project = Project.objects.filter(participants=i)
+        for proj in project:
+            proj_dates = Date.objects.filter(project=proj).filter(visiting_date__gte=datetime.date.today())
+            if proj_dates:
+                dates.add(proj_dates)
+    context = {'dates': dates}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'calendar.html'), context)

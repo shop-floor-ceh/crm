@@ -2,6 +2,28 @@
 {% block title %} Твой календарь {% endblock %}
 {% block content %}
 <h2>
-  Календарь в разработке
+    Календарь
 </h2>
+<div class="d-flex flex-wrap mt-2">
+    {% for proj_dates in dates %}
+    <div>
+        <h4>Проект: {{ proj_dates.first.project }}</h4>
+        {% for date in proj_dates %}
+            <div class="p-2">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ date.visiting_date }} {{ date.visiting_time|time:'H:i' }}</h5>
+                        <div class="card-text">
+                            <p>Адресс: {{ date.address }}</p>
+                            <p>Сеттинг: {{ date.setting }}</p>
+                            <p style="white-space: pre-line">Сцены: {{ date.scene }}</p>
+                            <a href="project/{{ date.project.id }}" class="btn btn-primary">Страница проекта</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
