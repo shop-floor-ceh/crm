@@ -224,5 +224,56 @@
 <div class="p-2">
     <h4>Календарь</h4>
 </div>
+{% if user.can_add_dates %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Добавить дату
+</button>
 
+<!-- Modal -->
+<form method="post" action="" name="add-date">
+    {% csrf_token %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавить дату</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="date">Дата</label>
+                        <input type="date" class="form-control" id="date" name="visiting_date" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="time">Время</label>
+                        <input type="time" class="form-control" id="time" name="visiting_time" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="address">Адресс</label>
+                        <input type="text" class="form-control" id="address" placeholder="Адресс" required
+                               name="address">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="setting">Сеттинг</label>
+                        <input type="text" class="form-control" id="setting" placeholder="Сеттинг" required
+                               name="setting">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-group-text">Сцены</label>
+                        <label>
+                            <textarea name="scene" class="form-control" placeholder="Сцены" cols="40"
+                                      required></textarea>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary" name="add-date">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endif %}
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from account.models import Account, SocialNetworks, Notification
+from account.models import Account, SocialNetworks
 
 admin.site.register(Account)
 admin.site.register(SocialNetworks)
-admin.site.register(Notification)
+

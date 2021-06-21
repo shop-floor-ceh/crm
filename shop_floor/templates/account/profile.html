@@ -165,7 +165,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="myCheckbox" name="telegram"
                        onclick="myFunction()"
-                       {% if notification.telegram %} checked {% endif %}>
+                       {% if user.telegram_notify %} checked {% endif %}>
                 <label class="form-check-label">
                     <strong>Телеграм</strong>
                 </label>
@@ -188,7 +188,7 @@
             </div>
             <div class="form-check mt-2">
                 <input class="form-check-input" type="checkbox" value="" id="Mail" name="mail"
-                       {% if notification.mail %} checked {% endif %}>
+                       {% if user.mail_notify %} checked {% endif %}>
                 <label class="form-check-label" for="Mail">
                     <strong>Почта</strong>
                 </label>

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from account.models import Account, Notification, SocialNetworks
+from account.models import Account, SocialNetworks
 
 
 class CreateUserForm(UserCreationForm):

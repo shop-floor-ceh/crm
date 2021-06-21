@@ -11,7 +11,7 @@ from django.db.models.query import QuerySet
 from shop_floor.settings import BASE_DIR
 from main.models import Project, Participant
 from account.forms import CreateUserForm, LoginUserForm
-from account.models import Account, Notification, SocialNetworks
+from account.models import Account, SocialNetworks
 from account.utils import token_generator, check_telegram_id, return_correct_phone
 
 import os
@@ -61,20 +61,19 @@ def profile_page(request, username):
             return redirect(f'/profile/{user.username}')
         elif 'notify' in request.POST:
             user = Account.objects.get(username=request.user.username)
-            notify = Notification.objects.get(user=user)
 
             if 'telegram' in request.POST:
                 if check_telegram_id(int(request.POST['telegram-id'])):
-                    notify.telegram = True
+                    user.telegram_notify = True
                     user.telegram_id = int(request.POST['telegram-id'])
-                    user.save()
+
                 else:
                     messages.error(request, 'Не получилось проверить телеграм id')
             else:
-                notify.telegram = False
-            notify.mail = True if 'mail' in request.POST else False
-            notify.save()
+                user.telegram_notify = False
 
+            user.mail_notify = True if 'mail' in request.POST else False
+            user.save()
             messages.success(request, 'Успешно сохранено')
             return redirect(f'/profile/{user.username}')
     user = Account.objects.get(username=username)
@@ -91,11 +90,10 @@ def profile_page(request, username):
                 projects.add(x)
     networks = SocialNetworks.objects.filter(user=user)
     user.photo.name = '/'.join(user.photo.name.split('/')[1:])
-    notification = Notification.objects.get(user=user)
+
     context = {
         'user': user,
         'networks': networks,
-        'notification': notification,
         'projects': projects
     }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'profile.html'), context)
@@ -129,7 +127,6 @@ def registration(request):
             user = user_form.save()
             user.is_active = False
             user.save()
-            Notification.objects.create(user=user, telegram=False, mail=False, vk=False)
 
             user_id = urlsafe_base64_encode(force_bytes(user.username))
             domain = get_current_site(request).domain

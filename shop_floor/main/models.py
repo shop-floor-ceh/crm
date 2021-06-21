@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import Account
+import time
 
 
 # Create your models here.
@@ -68,10 +69,12 @@ class Date(models.Model):
         verbose_name_plural = 'Даты встреч'
 
     project = models.ForeignKey(verbose_name='Проект', to=Project, on_delete=models.CASCADE)
-    visiting_date = models.DateTimeField(verbose_name='Дата и время встречи')
+    visiting_date = models.DateField(verbose_name='Дата встречи')
+    visiting_time = models.TimeField(verbose_name='Время встречи', default=time.ctime(28800).split()[3])
     address = models.CharField(verbose_name='Адресс', max_length=250)
     setting = models.CharField(verbose_name='Сеттинг', max_length=250)
     scene = models.TextField(verbose_name='Сцены')
+    notify_send = models.BooleanField(verbose_name='Уведомление отпрвлено', default=False)
 
     def __str__(self):
-        return f'{self.project}, {str(self.visiting_date).split()[0]}'
+        return f'{self.project}, {self.visiting_date}'

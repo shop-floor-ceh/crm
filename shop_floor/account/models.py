@@ -57,6 +57,9 @@ class Account(AbstractBaseUser):
     phone = models.CharField(verbose_name='phone', max_length=15, blank=True, default=0)
     photo = models.ImageField(verbose_name='photo', blank=True, default='', upload_to='account/static/profile')
     about_me = models.TextField(verbose_name='about me', blank=True, default='')
+    mail_notify = models.BooleanField(verbose_name='mail', default=False)
+    telegram_notify = models.BooleanField(verbose_name='telegram', default=False)
+    vk = models.BooleanField(verbose_name='vk', default=False)
     telegram_id = models.BigIntegerField(verbose_name='telegram id', blank=True, default=0)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name', ]
@@ -84,17 +87,3 @@ class SocialNetworks(models.Model):
 
     def __str__(self):
         return f'{self.user} {self.network_name}'
-
-
-class Notification(models.Model):
-    class Meta:
-        verbose_name = 'Уведомления'
-        verbose_name_plural = 'Уведомления'
-
-    user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    mail = models.BooleanField(verbose_name='mail', default=False)
-    telegram = models.BooleanField(verbose_name='telegram', default=False)
-    vk = models.BooleanField(verbose_name='vk', default=False)
-
-    def __str__(self):
-        return f'{self.user}'

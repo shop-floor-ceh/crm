@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 
 import os
 
-from main.models import Project, Participant
+from main.models import Project, Participant, Date
 from main.forms import CreateProjectForm
 from account.models import Account
 from shop_floor.settings import BASE_DIR
@@ -25,7 +25,10 @@ def main_page(request):
                     projects.add(j)
             else:
                 projects.add(x)
-    context = {'projects': projects}
+
+    context = {
+        'projects': projects,
+    }
     return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'home.html'), context)
 
 
@@ -70,8 +73,21 @@ def unique_project_page(request, project_id):
             except:
                 messages.error(request, 'Что-то пошло не так')
                 return redirect(f'/project/{project_id}')
-    try:
+        if 'add-date' in request.POST:
+            date = Date.objects.create(
+                project=Project.objects.get(id=project_id),
+                visiting_date=request.POST['visiting_date'],
+                visiting_time=request.POST['visiting_time'],
+                address=request.POST['address'],
+                setting=request.POST['setting'],
+                scene=request.POST['scene'],
+                notify_send=False
+            )
+            date.save()
+            messages.success(request, 'Дата успешно добавлена')
+            return redirect(f'/project/{project_id}')
 
+    try:
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
@@ -114,7 +130,7 @@ def unique_project_page(request, project_id):
         context = {
             'project': project,
             'user': user,
-            'all_users': all_users
+            'all_users': all_users,
         }
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     except:
