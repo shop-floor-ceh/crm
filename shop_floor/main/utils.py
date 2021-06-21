@@ -6,6 +6,23 @@ from main.models import Date
 from django.core.mail import EmailMessage
 
 
+def could_not_send(admin, participant):
+    if admin.mail_notify:
+        email = EmailMessage(
+            'Не смог отправить',
+            f'Не смог отпрваить сообщение пользователю {participant}',
+            'noreply@semycolon.com',
+            [admin.email],
+        )
+        email.send()
+    if admin.telegram_notify:
+        bot = telebot.TeleBot('1890824375:AAErbP1HmkhidoXqYlhWlYx1iLivGd98ZXE')
+        bot.send_message(
+            admin.telegram_id,
+            f'Не смог отпрваить сообщение пользователю {participant}'
+        )
+
+
 class SendNotificationThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -38,17 +55,16 @@ class SendNotificationThread(threading.Thread):
                                 try:
                                     bot.send_message(participant.telegram_id, text)
                                 except:
-                                    bot.send_message(
-                                        date.project.admin.telegram_id,
-                                        f'Не смог отпрваить сообщение пользователю {participant}'
-                                    )
+                                    could_not_send(date.project.admin, participant)
                             if participant.mail_notify:
                                 email = EmailMessage(message_title, text, 'noreply@semycolon.com',
                                                      [participant.email], )
-                                email.send(fail_silently=False)
+                                try:
+                                    email.send(fail_silently=False)
+                                except:
+                                    could_not_send(date.project.admin, participant)
                         date.notify_send = True
                         date.save()
-
                 time.sleep(300)
         except Exception as e:
             print(e)

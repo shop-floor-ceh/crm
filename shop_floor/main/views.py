@@ -93,7 +93,7 @@ def unique_project_page(request, project_id):
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
         project.literary_script.name = '/'.join(project.literary_script.name.split('/')[1:])
         project.directors_script.name = '/'.join(project.directors_script.name.split('/')[1:])
-        all_users = Account.objects.all()
+        all_users = Account.objects.filter(is_active=True)
         user = request.user
         if project.admin == user:
             user.can_change_main_information = True
