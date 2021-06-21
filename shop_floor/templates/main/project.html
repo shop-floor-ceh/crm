@@ -223,13 +223,94 @@
 {% endif %}
 <div class="p-2">
     <h4>Календарь</h4>
+    <h6>Пока тестовый вариант с блоками, потом будет календарь</h6>
+</div>
+<div class="d-flex flex-wrap">
+    {% for date in dates.all %}
+    <div class="p-2">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ date.visiting_date }} {{ date.visiting_time|time:'H:i' }}</h5>
+                <div class="card-text">
+                    <p>Адресс: {{ date.address }}</p>
+                    <p>Сеттинг: {{ date.setting }}</p>
+                    <p style="white-space: pre-line">Сцены: {{ date.scene }}</p>
+                    {% if user.can_add_dates %}
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#editDate{{date.id}}">
+                        Редактировать
+                    </button>
+                    <!-- Modal -->
+                    <form method="post" action="" name="edit-date">
+                        {% csrf_token %}
+                        <div class="modal fade" id="editDate{{date.id}}" tabindex="-1" aria-labelledby="editDateLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editDateLabel">Редактировать дату</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="date">Дата</label>
+                                            <input type="date" class="form-control" id="date{{ date.id }}"
+                                                   name="visiting_date"
+                                                   value="{{ date.visiting_date|date:'Y-m-d' }}"
+                                                   required>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="time">Время</label>
+                                            <input type="time" class="form-control" id="time{{date.id}}"
+                                                   name="visiting_time" value="{{ date.visiting_time|time:'H:i' }}"
+                                                   required>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="address">Адресс</label>
+                                            <input type="text" class="form-control" id="address{{date.id}}"
+                                                   placeholder="Адресс" required value="{{date.address}}"
+                                                   name="address">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="setting">Сеттинг</label>
+                                            <input type="text" class="form-control" id="setting{{date.id}}"
+                                                   placeholder="Сеттинг" required value="{{date.setting}}"
+                                                   name="setting">
+                                        </div>
+                                        <div class="input-group">
+                                            <label class="input-group-text">Сцены</label>
+                                            <label>
+                                                <textarea name="scene" class="form-control" placeholder="Сцены"
+                                                          cols="40" required>{{date.scene}}</textarea>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Закрыть
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" name="edit-date"
+                                                value="{{ date.id }}">Изменить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% if user.can_add_dates %}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Добавить дату
 </button>
-
 <!-- Modal -->
 <form method="post" action="" name="add-date">
     {% csrf_token %}

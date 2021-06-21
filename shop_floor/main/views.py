@@ -86,14 +86,25 @@ def unique_project_page(request, project_id):
             date.save()
             messages.success(request, 'Дата успешно добавлена')
             return redirect(f'/project/{project_id}')
-
+        if 'edit-date' in request.POST:
+            date = Date.objects.get(id=request.POST['edit-date'])
+            date.visiting_date = request.POST['visiting_date']
+            date.visiting_time = request.POST['visiting_time']
+            date.address = request.POST['address']
+            date.setting = request.POST['setting']
+            date.scene = request.POST['scene']
+            date.notify_send = False
+            date.save()
+            return redirect(f'/project/{project_id}')
     try:
         project = Project.objects.get(pk=project_id)
         project.synopsis.name = '/'.join(project.synopsis.name.split('/')[1:])
         project.kpp.name = '/'.join(project.kpp.name.split('/')[1:])
         project.literary_script.name = '/'.join(project.literary_script.name.split('/')[1:])
         project.directors_script.name = '/'.join(project.directors_script.name.split('/')[1:])
+
         all_users = Account.objects.filter(is_active=True)
+
         user = request.user
         if project.admin == user:
             user.can_change_main_information = True
@@ -127,10 +138,14 @@ def unique_project_page(request, project_id):
                     True if participant.can_change_kpp else user.can_change_kpp
                 user.can_add_dates = \
                     True if participant.can_add_dates else user.can_add_dates
+
+        dates = Date.objects.filter(project=project).order_by('visiting_date')
+
         context = {
             'project': project,
             'user': user,
             'all_users': all_users,
+            'dates': dates
         }
         return render(request, os.path.join(str(BASE_DIR) + '/templates/main/', 'project.html'), context)
     except:

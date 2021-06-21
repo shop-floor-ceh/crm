@@ -8,7 +8,7 @@
     {% if user.photo %}
     <div class="p-2">
         <p>
-            <img src="/{{ user.photo }}" alt="Не загрузилась" width="380px">
+            <img src="/{{ user.photo }}" alt="Не загрузилась" class="img-thumbnail rounded-3" style="max-width: 350px;">
         </p>
     </div>
     {% endif %}
@@ -193,8 +193,6 @@
                     <strong>Почта</strong>
                 </label>
             </div>
-
-
             <button type="submit" class="btn btn-primary mt-2" name="notify">Сохранить изменения</button>
         </form>
     </div>
