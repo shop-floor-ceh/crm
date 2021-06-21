@@ -32,18 +32,18 @@ class SendNotificationThread(threading.Thread):
                         for participant in participants:
                             users.add(participant.participant)
                         for participant in users:
-                            message_text = f'Привет, {participant}\n' + message_text
+                            text = f'Привет, {participant}\n' + message_text
                             if participant.telegram_notify:
                                 bot = telebot.TeleBot('1890824375:AAErbP1HmkhidoXqYlhWlYx1iLivGd98ZXE')
                                 try:
-                                    bot.send_message(participant.telegram_id, message_text)
+                                    bot.send_message(participant.telegram_id, text)
                                 except:
                                     bot.send_message(
                                         date.project.admin.telegram_id,
                                         f'Не смог отпрваить сообщение пользователю {participant}'
                                     )
                             if participant.mail_notify:
-                                email = EmailMessage(message_title, message_text, 'noreply@semycolon.com',
+                                email = EmailMessage(message_title, text, 'noreply@semycolon.com',
                                                      [participant.email], )
                                 email.send(fail_silently=False)
                         date.notify_send = True
