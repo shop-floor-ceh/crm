@@ -9,4 +9,4 @@ class MainConfig(AppConfig):
     def ready(self):
         from main.utils import SendNotificationThread
         thread = SendNotificationThread()
-        thread.start()
+        # thread.start()

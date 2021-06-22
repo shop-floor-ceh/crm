@@ -52,6 +52,33 @@ def unique_project_page(request, project_id):
             messages.success(request, 'Участник успешно добавлен')
             return redirect(f'/project/{project_id}')
 
+        if 'edit-participants' in request.POST:
+            participants = Participant.objects.get(id=request.POST['edit-participants'])
+            participants.name = request.POST['name']
+            participants.can_change_main_information = \
+                True if 'can_change_main_information' in request.POST else False
+            participants.can_add_participant = \
+                True if 'can_add_participant' in request.POST else False
+            participants.can_change_synopsis = \
+                True if 'can_change_synopsis' in request.POST else False
+            participants.can_change_literary_script = \
+                True if 'can_change_literary_script' in request.POST else False
+            participants.can_change_directors_scripts = \
+                True if 'can_change_directors_scripts' in request.POST else False
+            participants.can_change_kpp = \
+                True if 'can_change_kpp' in request.POST else False
+            participants.can_add_dates = \
+                True if 'can_add_dates' in request.POST else False
+            participants.save()
+            messages.success(request, 'Участник успешно изменен')
+            return redirect(f'/project/{project_id}')
+
+        if 'del-participants' in request.POST:
+            participants = Participant.objects.get(id=request.POST['del-participants'])
+            participants.delete()
+            messages.success(request, 'Участник успешно удален')
+            return redirect(f'/project/{project_id}')
+
         if 'edit-project' in request.POST:
             project = Project.objects.get(pk=project_id)
             if 'name' in request.POST:
@@ -77,6 +104,9 @@ def unique_project_page(request, project_id):
             except:
                 messages.error(request, 'Что-то пошло не так')
                 return redirect(f'/project/{project_id}')
+
+        if 'del-project' in request.POST:
+            return redirect(f'/project/{project_id}/delete')
 
         if 'add-date' in request.POST:
             date = Date.objects.create(
@@ -108,9 +138,6 @@ def unique_project_page(request, project_id):
             Date.objects.get(id=request.POST['del-date']).delete()
             messages.success(request, 'Дата успешна удалена')
             return redirect(f'/project/{project_id}')
-
-        if 'del-project' in request.POST:
-            return redirect(f'/project/{project_id}/delete')
 
     try:
         project = Project.objects.get(pk=project_id)

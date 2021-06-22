@@ -21,7 +21,10 @@ def all_profiles(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Вы еще не вошли')
         return redirect('/login')
-    context = {}
+    all_users = Account.objects.filter(is_active=True)
+    for user in all_users:
+        user.phone = return_correct_phone(user.phone)
+    context = {'users': all_users}
     return render(request, os.path.join(str(BASE_DIR) + '/templates/account/', 'all_profiles.html'), context)
 
 

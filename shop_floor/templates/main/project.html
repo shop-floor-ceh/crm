@@ -14,7 +14,120 @@
         {% for participant in project.participants.all %}
         <p>
             <a class="btn btn-primary" href="/profile/{{participant.participant.username }}">{{ participant.name }}</a>
-        </p>
+            {% if user.can_add_participant and user != participant.participant or project.admin == user %}
+            <a type="button" class="btn btn-secondary" data-bs-toggle="modal"
+               data-bs-target="#edit-participant{{ participant.id }}">
+                <i class="fas fa-cog"></i>
+            </a>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="modal fade" id="edit-participant{{ participant.id }}"
+                 aria-labelledby="edit-participant{{ participant.id }-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="edit-participant{{ participant.id }}-label">Редактировать
+                                участника</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Участник</h5>
+
+                            <select class="form-select" aria-label="Default select example" name="participant" required>
+                                <option value="participant.id">{{ participant.participant }}</option>
+                            </select>
+                            <div class="input-group mb-3 mt-2">
+                                <label class="input-group-text">Роль</label>
+                                <label>
+                                    <input type="text" class="form-control" name="name" placeholder="Например режиссер"
+                                           maxlength="120" value="{{ participant.name }}" required>
+                                </label>
+                            </div>
+                            <hr>
+                            <h5>Права</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_change_main_information{{ participant.id }}"
+                                       name="can_change_main_information"
+                                       {% if participant.can_change_main_information %} checked {% endif %}>
+                                <label class="form-check-label"
+                                       for="id_can_change_main_information{{ participant.id }}">
+                                    Менять основную информацию
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_change_synopsis{{ participant.id }}"
+                                       name="can_change_synopsis"
+                                {% if participant.can_change_synopsis %} checked {% endif %}>
+                                <label class="form-check-label" for="id_can_change_synopsis{{ participant.id }}">
+                                    Менять синопсис
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_change_literary_script{{ participant.id }}"
+                                       name="can_change_literary_script"
+                                {% if participant.can_change_literary_script %} checked {% endif %}>
+                                <label class="form-check-label" for="id_can_change_literary_script{{ participant.id }}">
+                                    Менять литературный сценарий
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_change_directors_scripts{{ participant.id }}"
+                                       name="can_change_directors_scripts"
+                                {% if participant.can_change_directors_scripts %} checked {% endif %}>
+                                <label class="form-check-label"
+                                       for="id_can_change_directors_scripts{{ participant.id }}">
+                                    Менять режисерский сценарий
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_change_kpp{{ participant.id }}"
+                                       name="can_change_kpp"
+                                {% if participant.can_change_kpp %} checked {% endif %}>
+                                <label class="form-check-label" for="id_can_change_kpp{{ participant.id }}">
+                                    Менять календарно-постановочный план
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_add_participant{{ participant.id }}"
+                                       name="can_add_participant"
+                                {% if participant.can_add_participant %} checked {% endif %}>
+                                <label class="form-check-label" for="id_can_add_participant{{ participant.id }}">
+                                    Добавлять новых участников
+                                </label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                       id="id_can_add_dates{{ participant.id }}"
+                                       name="can_add_dates"
+                                {% if participant.can_add_dates %} checked {% endif %}>
+                                <label class="form-check-label" for="id_can_add_dates{{ participant.id }}">
+                                    Добавлять даты встреч
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-danger" name="del-participants"
+                                    value="{{ participant.id }}">Удалить
+                            </button>
+                            <button type="submit" class="btn btn-primary" name="edit-participants"
+                                    value="{{ participant.id }}">Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        {% endif %}
         {% endfor %}
         {% if user.can_add_participant %}
         <p>
