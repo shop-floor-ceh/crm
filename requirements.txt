@@ -1,6 +1,6 @@
 Django==3.2.4
 selenium==3.141.0
-pillow==8.2.0
+pillow==8.3.2
 psycopg2==2.8.6
 six==1.16.0
 pytelegrambotapi
